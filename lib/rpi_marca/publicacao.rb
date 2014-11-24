@@ -63,8 +63,7 @@ module RpiMarca
     end
 
     def self.get_element_value(element)
-      return nil if element.nil? || element.text == ""
-      element.text
+      return element.text unless element.nil? || element.text == ""
     end
 
     def self.parse_date(value)
