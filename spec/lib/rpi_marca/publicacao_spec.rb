@@ -99,6 +99,54 @@ describe RpiMarca::Publicacao do
     </processo>
   XML
 
+  DEPOSITO_MARCA_FIGURATIVA = <<-XML
+    <processo data-deposito="25/08/2008" numero="829825584">
+      <despachos>
+        <despacho codigo="IPAS421" nome="Republicação de pedido para oposição">
+          <texto-complementar>por alteração na especificação</texto-complementar>
+        </despacho>
+      </despachos>
+      <titulares>
+        <titular nome-razao-social="OP SPORTS COMERCIAL LTDA EPP" pais="BR" uf="SP"/>
+      </titulares>
+      <marca apresentacao="Figurativa" natureza="De Serviço"/>
+      <classes-vienna edicao="4">
+        <classe-vienna codigo="27.5.1"/>
+        <classe-vienna codigo="27.7.1"/>
+      </classes-vienna>
+      <classe-nice codigo="35" edicao="10">
+        <especificacao>COMÉRCIO VAREJISTA ATRAVÉS DE QUALQUER MEIO DE BONECOS, ESTÁTUAS, DIORAMAS, BRINQUEDOS COLECIONÁVEIS, RELACIONADOS A PERSONAGENS DE FILMES E SÉRIES DE TV E VIDEOGAMES.;</especificacao>
+      </classe-nice>
+      <prioridade-unionista>
+        <prioridade data="15/02/2012" numero="CTM 010645091" pais="IT"/>
+      </prioridade-unionista>
+      <apostila>SEM DIREITO AO USO EXCLUSIVO DA EXPRESSÃO &quot;TOYS&quot;.</apostila>
+      <procurador>ABM ASSESSORIA  BRASILEIRA DE MARCAS LTDA.</procurador>
+    </processo>
+  XML
+
+  DEPOSITO_MARCA_CERTIFIC = <<-XML
+    <processo numero="908163495" data-deposito="22/08/2014">
+      <despachos>
+        <despacho codigo="IPAS009" nome="Publicação de pedido de registro para oposição (exame formal concluído)"/>
+      </despachos>
+      <titulares>
+        <titular nome-razao-social="INSTITUTO INTERNET NO ESTADO DA ARTE - I-START" pais="BR" uf="SP"/>
+      </titulares>
+      <marca apresentacao="Mista" natureza="Certific.">
+        <nome>istart escola digital segura</nome>
+      </marca>
+      <classes-vienna edicao="4">
+        <classe-vienna codigo="26.4.9"/>
+        <classe-vienna codigo="27.5.1"/>
+      </classes-vienna>
+      <classe-nice codigo="42">
+        <especificacao>Certificação de A fim de promover sua missão junto às instituições de ensino, o i. Start desenvolveu o selo escola digital segura, uma ação pioneira de responsabilidade social digital. O selo escola digital segura auxilia a direção a incorporar as tecnologias da informação e comunicação ao ambiente escolar e implantar o uso seguro dos recursos de tecnologia educacional identificando e mitigando possíveis incidentes digitais. Assim o i. Start promove o reconhecimento das instituições de ensino que investem em infraestrutura, formulam e aplicam regulamentos e procedimentos para gestão da informação e dos recursos de tecnologia da informação e comunicação e ainda formam alunos e educadores para segurança da informação e ética digital. Diante desse cenário, o selo escola digital segura reconhece o valor das instituições de ensino que se comprometem com a orientação sobre ética e segurança digital, com indicadores distribuídos em quatro níveis: infraestrutura tecnológica, elaboração de regras e procedimentos quanto ao uso da tecnologia, capacitação de colaboradores e docentes e conscientização do corpo discente e de toda a comunidade relacionada. A conquista do certificado é simbolizada, em cada um dos níveis avaliados, pelo ¿selo escola digital segura¿, que permite à instituição de ensino dar publicidade aos esforços envidados no processo educacional para garantir o uso ético, seguro e legal da tecnologia.; </especificacao>
+      </classe-nice>
+      <procurador>Diego Perez Martin de Almeida</procurador>
+    </processo>
+  XML
+
   DEPOSITO_NCL_SEM_EDICAO = <<-XML
     <processo data-deposito="25/08/2008" numero="829825584">
       <despachos>
@@ -456,6 +504,12 @@ describe RpiMarca::Publicacao do
       expect(publicacao.marca).to eq 'MC FARLANE TOYS'
     end
 
+    it "não tem marca quando for Figurativa ou Tridimensional" do
+      publicacao = RpiMarca::Publicacao.new(DEPOSITO_MARCA_FIGURATIVA)
+
+      expect(publicacao.marca).to be_nil
+    end
+
     it "pode ter apresentação" do
       publicacao = RpiMarca::Publicacao.new(DEPOSITO)
 
@@ -466,6 +520,12 @@ describe RpiMarca::Publicacao do
       publicacao = RpiMarca::Publicacao.new(DEPOSITO)
 
       expect(publicacao.natureza).to eq "De Serviço"
+    end
+
+    it "natureza 'Certificação' é normalizada" do
+      publicacao = RpiMarca::Publicacao.new(DEPOSITO_MARCA_CERTIFIC)
+
+      expect(publicacao.natureza).to eq "Certificação"
     end
 
     it "pode ter procurador" do

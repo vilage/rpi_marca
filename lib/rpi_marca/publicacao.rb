@@ -35,6 +35,10 @@ module RpiMarca
       "IPAS423"
     ]
 
+    NATUREZA_NORMALIZACAO = {
+      "Certific." => "Certificação"
+    }
+
     def initialize(publicacao)
       @publicacao =
         if publicacao.is_a? Nokogiri::XML::Element
@@ -129,7 +133,7 @@ module RpiMarca
     def parse_marca(el)
       @marca = Publicacao.get_element_value(el.at_xpath(".//nome"))
       @apresentacao = Publicacao.get_attribute_value(el, "apresentacao")
-      @natureza = Publicacao.get_attribute_value(el, "natureza")
+      @natureza = NATUREZA_NORMALIZACAO.fetch(Publicacao.get_attribute_value(el, "natureza")) { |default| default }
     end
 
     def parse_classe_nice(el)
