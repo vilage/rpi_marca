@@ -2,7 +2,7 @@ require "rpi_marca/publicacao"
 require "rpi_marca/exceptions"
 
 describe RpiMarca::Publicacao do
-  PUBLICACAO_PROTOCOLO_COMPLETO = <<-XML
+  PUBLICACAO_PROTOCOLO_COMPLETO = <<-PUBLICACAO
     <processo numero="829142282">
       <despachos>
         <despacho codigo="IPAS270" nome="Deferimento de petição">
@@ -16,9 +16,9 @@ describe RpiMarca::Publicacao do
         </despacho>
       </despachos>
     </processo>
-  XML
+  PUBLICACAO
 
-  PUBLICACAO_DOIS_DESPACHOS = <<-XML
+  PUBLICACAO_DOIS_DESPACHOS = <<-PUBLICACAO
     <processo numero="829142282">
       <despachos>
         <despacho codigo="IPAS270" nome="Deferimento de petição">
@@ -31,9 +31,9 @@ describe RpiMarca::Publicacao do
         </despacho>
       </despachos>
     </processo>
-  XML
+  PUBLICACAO
 
-  PUBLICACAO_SEM_PROTOCOLO = <<-XML
+  PUBLICACAO_SEM_PROTOCOLO = <<-PUBLICACAO
     <processo numero="828247935">
       <despachos>
         <despacho codigo="IPAS142" nome="Sobrestamento do exame de mérito">
@@ -41,9 +41,9 @@ describe RpiMarca::Publicacao do
         </despacho>
       </despachos>
     </processo>
-  XML
+  PUBLICACAO
 
-  TEXTO_COMPLEMENTAR_CONTENDO_PROTOCOLO = <<-XML
+  TEXTO_COMPLEMENTAR_CONTENDO_PROTOCOLO = <<-PUBLICACAO
     <processo numero="905653858">
       <despachos>
         <despacho codigo="IPAS423" nome="Notificação de oposição para manifestação">
@@ -51,9 +51,9 @@ describe RpiMarca::Publicacao do
         </despacho>
       </despachos>
     </processo>
-  XML
+  PUBLICACAO
 
-  PROCURADOR_SEM_PROTOCOLO = <<-XML
+  PROCURADOR_SEM_PROTOCOLO = <<-PUBLICACAO
     <processo numero="828247935">
       <despachos>
         <despacho codigo="IPAS142" nome="Sobrestamento do exame de mérito">
@@ -69,9 +69,9 @@ describe RpiMarca::Publicacao do
         <sobrestador marca="MÓDULO E-SECURITY" processo="823129900"/>
       </sobrestadores>
     </processo>
-  XML
+  PUBLICACAO
 
-  DEPOSITO = <<-XML
+  DEPOSITO = <<-PUBLICACAO
     <processo data-deposito="25/08/2008" numero="829825584">
       <despachos>
         <despacho codigo="IPAS421" nome="Republicação de pedido para oposição">
@@ -97,9 +97,9 @@ describe RpiMarca::Publicacao do
       <apostila>SEM DIREITO AO USO EXCLUSIVO DA EXPRESSÃO &quot;TOYS&quot;.</apostila>
       <procurador>ABM ASSESSORIA  BRASILEIRA DE MARCAS LTDA.</procurador>
     </processo>
-  XML
+  PUBLICACAO
 
-  DEPOSITO_MARCA_FIGURATIVA = <<-XML
+  DEPOSITO_MARCA_FIGURATIVA = <<-PUBLICACAO
     <processo data-deposito="25/08/2008" numero="829825584">
       <despachos>
         <despacho codigo="IPAS421" nome="Republicação de pedido para oposição">
@@ -123,9 +123,9 @@ describe RpiMarca::Publicacao do
       <apostila>SEM DIREITO AO USO EXCLUSIVO DA EXPRESSÃO &quot;TOYS&quot;.</apostila>
       <procurador>ABM ASSESSORIA  BRASILEIRA DE MARCAS LTDA.</procurador>
     </processo>
-  XML
+  PUBLICACAO
 
-  DEPOSITO_MARCA_CERTIFIC = <<-XML
+  DEPOSITO_MARCA_CERTIFIC = <<-PUBLICACAO
     <processo numero="908163495" data-deposito="22/08/2014">
       <despachos>
         <despacho codigo="IPAS009" nome="Publicação de pedido de registro para oposição (exame formal concluído)"/>
@@ -145,9 +145,9 @@ describe RpiMarca::Publicacao do
       </classe-nice>
       <procurador>Diego Perez Martin de Almeida</procurador>
     </processo>
-  XML
+  PUBLICACAO
 
-  DEPOSITO_NCL_SEM_EDICAO = <<-XML
+  DEPOSITO_NCL_SEM_EDICAO = <<-PUBLICACAO
     <processo data-deposito="25/08/2008" numero="829825584">
       <despachos>
         <despacho codigo="IPAS421" nome="Republicação de pedido para oposição">
@@ -158,9 +158,9 @@ describe RpiMarca::Publicacao do
         <especificacao>COMÉRCIO VAREJISTA ATRAVÉS DE QUALQUER MEIO DE BONECOS, ESTÁTUAS, DIORAMAS, BRINQUEDOS COLECIONÁVEIS, RELACIONADOS A PERSONAGENS DE FILMES E SÉRIES DE TV E VIDEOGAMES.;</especificacao>
       </classe-nice>
     </processo>
-  XML
+  PUBLICACAO
 
-  PUBLICACAO_COM_CLASSE_NACIONAL = <<-XML
+  PUBLICACAO_COM_CLASSE_NACIONAL = <<-PUBLICACAO
     <processo data-deposito="25/08/2008" numero="829825584">
       <despachos>
         <despacho codigo="IPAS421" nome="Republicação de pedido para oposição">
@@ -175,9 +175,9 @@ describe RpiMarca::Publicacao do
         </sub-classes-nacional>
       </classe-nacional>
     </processo>
-  XML
+  PUBLICACAO
 
-  CLASSE_NACIONAL_MAIS_DE_3_SUBCLASSES = <<-XML
+  CLASSE_NACIONAL_MAIS_DE_3_SUBCLASSES = <<-PUBLICACAO
     <processo data-deposito="25/08/2008" numero="829825584">
       <despachos>
         <despacho codigo="IPAS421" nome="Republicação de pedido para oposição">
@@ -194,9 +194,9 @@ describe RpiMarca::Publicacao do
         </sub-classes-nacional>
       </classe-nacional>
     </processo>
-  XML
+  PUBLICACAO
 
-  CLASSE_LOGOTIPO_MAIS_DE_5_SUBCLASSES = <<-XML
+  CLASSE_LOGOTIPO_MAIS_DE_5_SUBCLASSES = <<-PUBLICACAO
     <processo data-deposito="25/08/2008" numero="829825584">
       <despachos>
         <despacho codigo="IPAS421" nome="Republicação de pedido para oposição">
@@ -212,7 +212,7 @@ describe RpiMarca::Publicacao do
         <classe-vienna codigo="27.15.1"/>
       </classes-vienna>
     </processo>
-  XML
+  PUBLICACAO
 
   PRIORIDADE_UNIONISTA_SEM_DATA = <<-PUBLICACAO
     <processo data-deposito="25/08/2008" numero="829825584">
