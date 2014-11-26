@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="revista">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="processo" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="numero" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:nonNegativeInteger">
+            <xs:maxInclusive value="9999"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="data" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{2}/[0-9]{2}/[0-9]{4}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="processo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="despachos"/>
+        <xs:choice minOccurs="0" maxOccurs="9">
+          <xs:element ref="titulares"/>
+          <xs:element ref="marca"/>
+          <xs:element ref="classes-vienna"/>
+          <xs:element ref="classe-nice"/>
+          <xs:element ref="apostila"/>
+          <xs:element ref="prioridade-unionista"/>
+          <xs:element ref="classe-nacional"/>
+          <xs:element ref="procurador"/>
+          <xs:element ref="sobrestadores"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="numero" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+            <xs:pattern value="[0-9]{9}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="data-deposito">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{2}/[0-9]{2}/[0-9]{4}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="data-concessao">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{2}/[0-9]{2}/[0-9]{4}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="data-vigencia">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{2}/[0-9]{2}/[0-9]{4}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="despachos">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="despacho" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="despacho">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="texto-complementar" type="xs:string" minOccurs="0"/>
+        <xs:element ref="protocolo" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="codigo" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="IPAS[0-9]{3}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute type="xs:string" name="nome" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="protocolo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="requerente" minOccurs="0"/>
+        <xs:element ref="procurador" minOccurs="0"/>
+        <xs:element ref="cessionario" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="numero" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+            <xs:pattern value="[0-9]{10,}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="data" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{2}/[0-9]{2}/[0-9]{4}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="codigoServico" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{4,5}|P[0-9]{2}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="titulares">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="titular" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute type="xs:string" name="nome-razao-social" use="required"/>
+            <xs:attribute name="pais" use="required">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:pattern value="[A-Z]{2}"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="uf">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:pattern value="[A-Z]{2}"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="marca">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="nome" type="xs:string" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="apresentacao" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Nominativa"/>
+            <xs:enumeration value="Mista"/>
+            <xs:enumeration value="Figurativa"/>
+            <xs:enumeration value="Tridimensional"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="natureza" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="De Produto"/>
+            <xs:enumeration value="De Serviço"/>
+            <xs:enumeration value="Coletiva"/>
+            <xs:enumeration value="Certificação"/>
+            <xs:enumeration value="Certific."/>
+            <xs:enumeration value="Genérica"/>
+            <xs:enumeration value="Específica"/>
+            <xs:enumeration value="Expressão Propaganda"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="especificacao">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="classes-vienna">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="classe-vienna" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="edicao" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="classe-vienna">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="codigo" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="classe-nice">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="especificacao"/>
+      </xs:sequence>
+      <xs:attribute name="codigo" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+            <xs:minInclusive value="01"/>
+            <xs:maxInclusive value="45"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="apostila">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="prioridade-unionista">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="prioridade" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="numero" use="required"/>
+                <xs:attribute name="data" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[0-9]{2}/[0-9]{2}/[0-9]{4}"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="pais" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[A-Z]{2}"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="classe-nacional">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="especificacao"/>
+        <xs:element ref="sub-classes-nacional"/>
+      </xs:sequence>
+      <xs:attribute name="codigo" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+            <xs:minInclusive value="01"/>
+            <xs:maxInclusive value="43"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sub-classes-nacional">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="sub-classe-nacional" maxOccurs="3">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="codigo" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:integer">
+                      <xs:totalDigits value="2"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="procurador" type="xs:string"/>
+  <xs:element name="requerente">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="nome-razao-social" use="required"/>
+          <xs:attribute type="xs:string" name="pais"/>
+          <xs:attribute type="xs:string" name="uf"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cessionario">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="nome-razao-social" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sobrestadores">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sobrestador" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sobrestador">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="processo" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:pattern value="[0-9]{9}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute type="xs:string" name="marca"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
