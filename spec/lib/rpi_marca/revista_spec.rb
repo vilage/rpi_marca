@@ -105,13 +105,13 @@ describe RpiMarca::Revista do
   end
 
   describe "#valid?" do
-    it "is valid" do
+    it "XML é válido" do
       revista = RpiMarca::Revista.new(RPI_2240)
 
       expect(revista).to be_valid
     end
 
-    it "is invalid" do
+    it "erro quando XML é inválido" do
       revista = RpiMarca::Revista.new(RPI_INVALIDA)
 
       expect(revista).not_to be_valid
