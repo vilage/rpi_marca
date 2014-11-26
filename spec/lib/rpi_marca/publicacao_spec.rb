@@ -258,6 +258,15 @@ describe RpiMarca::Publicacao do
     </processo>
   PUBLICACAO
 
+  PUBLICACAO_ELEMENTO_NOVO_INVALIDO = <<-PUBLICACAO
+    <processo numero="829142282">
+      <despachos>
+        <despacho codigo="IPAS158" nome="Concessão de registro"/>
+      </despachos>
+      <foo/>
+    </processo>
+  PUBLICACAO
+
   it "aceita uma string contendo a publicação" do
     publicacao = DEPOSITO
 
@@ -274,6 +283,10 @@ describe RpiMarca::Publicacao do
     class Foo; end
 
     expect { RpiMarca::Publicacao.new(Foo.new)}.to raise_error RpiMarca::ParseError
+  end
+
+  it "erro quando um elemento novo/inválido for publicado" do
+      expect { RpiMarca::Publicacao.new(PUBLICACAO_ELEMENTO_NOVO_INVALIDO) }.to raise_error RpiMarca::ParseError
   end
 
   context "processo" do
