@@ -9,5 +9,15 @@ module RpiMarca
       @edicao = edicao if edicao > 0
       @especificacao = especificacao
     end
+
+    def self.parse(el)
+      return unless el
+
+      new(
+        classe: Publicacao.get_attribute_value(el, "codigo"),
+        edicao: Publicacao.get_attribute_value(el, "edicao").to_i,
+        especificacao: Publicacao.get_element_value(el.at_xpath(".//especificacao"))
+      )
+    end
   end
 end

@@ -6,5 +6,14 @@ module RpiMarca
       @processo = processo
       @marca = marca
     end
+
+    def self.parse(el)
+      return unless el
+
+      new(
+        processo: Publicacao.get_attribute_value(el, "processo"),
+        marca: Publicacao.get_attribute_value(el, "marca")
+      )
+    end
   end
 end

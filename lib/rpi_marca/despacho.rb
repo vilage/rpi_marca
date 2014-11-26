@@ -7,8 +7,8 @@ module RpiMarca
     PROTOCOLOS_TEXTO_COMPLEMENTAR = Regexp.new(/(?<protocolo>[0-9]{12,}) de (?<dataprotocolo>[0-9]{2}\/[0-9]{2}\/[0-9]{4})/)
 
     def initialize(codigo:, descricao:, complemento:, protocolo:)
-      @codigo = codigo
-      @descricao = descricao
+      @codigo = codigo or raise ParseError
+      @descricao = descricao or raise ParseError
       @complemento = complemento
       @protocolo = protocolo
       @protocolos_complemento = []
@@ -16,9 +16,21 @@ module RpiMarca
       parse_texto_complementar if @complemento
     end
 
+    def self.parse(el)
+      codigo = Publicacao.get_attribute_value(el, "codigo")
+
+      new(
+        codigo: codigo,
+        descricao: Publicacao.get_attribute_value(el, "nome"),
+        complemento: Publicacao.get_element_value(el.at_xpath("texto-complementar")),
+        protocolo: Protocolo.parse(el.at_xpath("protocolo"), codigo)
+      )
+    end
+
+    private
     def parse_texto_complementar
-      @complemento.scan(PROTOCOLOS_TEXTO_COMPLEMENTAR).each do |protocolo, data|
-        @protocolos_complemento << Protocolo.new(
+      @protocolos_complemento = @complemento.scan(PROTOCOLOS_TEXTO_COMPLEMENTAR).map do |protocolo, data|
+        Protocolo.new(
           numero: protocolo,
           data: Publicacao.parse_date(data)
         )

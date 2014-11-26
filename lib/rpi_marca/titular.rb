@@ -1,21 +1,20 @@
 module RpiMarca
   class Titular
-    private_class_method :new
     attr_reader :nome_razao_social, :pais, :uf
 
-    def initialize(nome_razao_social, pais, uf)
+    def initialize(nome_razao_social:, pais:, uf:)
       @nome_razao_social = nome_razao_social
       @pais = pais
       @uf = uf
     end
 
     def self.parse(el)
-      return nil unless el
+      return unless el
 
       new(
-        Publicacao.get_attribute_value(el, "nome-razao-social"),
-        Publicacao.get_attribute_value(el, "pais"),
-        Publicacao.get_attribute_value(el, "uf")
+        nome_razao_social: Publicacao.get_attribute_value(el, "nome-razao-social"),
+        pais: Publicacao.get_attribute_value(el, "pais"),
+        uf: Publicacao.get_attribute_value(el, "uf")
       )
     end
   end
