@@ -98,6 +98,12 @@ describe RpiMarca::Revista do
     expect(publicacao).to be_a RpiMarca::Publicacao
   end
 
+  it "retorna um Enumerator" do
+    revista = RpiMarca::Revista.new(RPI_2240)
+
+    expect(revista.each).to be_a Enumerator
+  end
+
   describe "#valid?" do
     it "is valid" do
       revista = RpiMarca::Revista.new(RPI_2240)

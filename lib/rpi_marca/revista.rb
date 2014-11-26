@@ -16,13 +16,11 @@ module RpiMarca
       )
     end
 
-    def each &block
-      @source.xpath("//processo").each do |processo|
-        if block_given?
-          block.call Publicacao.new(processo)
-        else
-          yield Publicacao.new(processo)
-        end
+    def each
+      if block_given?
+        @source.xpath("//processo").each { |publicacao| yield Publicacao.new(publicacao) }
+      else
+        to_enum(:each)
       end
     end
 
