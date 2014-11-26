@@ -1,5 +1,6 @@
 require "rpi_marca/publicacao"
 require "rpi_marca/exceptions"
+require "nokogiri"
 
 describe RpiMarca::Publicacao do
   PUBLICACAO_PROTOCOLO_COMPLETO = <<-PUBLICACAO
@@ -256,6 +257,24 @@ describe RpiMarca::Publicacao do
       </despachos>
     </processo>
   PUBLICACAO
+
+  it "aceita uma string contendo a publicação" do
+    publicacao = DEPOSITO
+
+    expect { RpiMarca::Publicacao.new(publicacao) }.not_to raise_error
+  end
+
+  it "aceita um objeto `Nokogiri::XML::Element` contendo a publicação" do
+    publicacao = Nokogiri::XML(DEPOSITO).at_xpath("//processo")
+
+    expect { RpiMarca::Publicacao.new(publicacao) }.not_to raise_error
+  end
+
+  it "erro ao instanciar com informações de publicação inválidas" do
+    class Foo; end
+
+    expect { RpiMarca::Publicacao.new(Foo.new)}.to raise_error RpiMarca::ParseError
+  end
 
   context "processo" do
     it "número é identificado corretamente" do

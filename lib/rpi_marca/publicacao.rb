@@ -46,7 +46,7 @@ module RpiMarca
         elsif publicacao.is_a? String
           Nokogiri::XML(publicacao).at_xpath("//processo")
         else
-          raise ParseError
+          raise ParseError, "Publicação em formato inválido: #{publicacao.class}"
         end
 
       raise ParseError if @publicacao.name != "processo"
