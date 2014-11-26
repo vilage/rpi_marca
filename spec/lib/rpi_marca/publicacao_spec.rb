@@ -2,7 +2,7 @@ require "rpi_marca/publicacao"
 require "rpi_marca/exceptions"
 
 describe RpiMarca::Publicacao do
-  PETICAO_1 = <<-XML
+  PUBLICACAO_PROTOCOLO_COMPLETO = <<-XML
     <processo numero="829142282">
       <despachos>
         <despacho codigo="IPAS270" nome="Deferimento de petição">
@@ -18,7 +18,7 @@ describe RpiMarca::Publicacao do
     </processo>
   XML
 
-  PETICAO_2 = <<-XML
+  PUBLICACAO_DOIS_DESPACHOS = <<-XML
     <processo numero="829142282">
       <despachos>
         <despacho codigo="IPAS270" nome="Deferimento de petição">
@@ -33,7 +33,7 @@ describe RpiMarca::Publicacao do
     </processo>
   XML
 
-  PETICAO_SEM_PROTOCOLO = <<-XML
+  PUBLICACAO_SEM_PROTOCOLO = <<-XML
     <processo numero="828247935">
       <despachos>
         <despacho codigo="IPAS142" nome="Sobrestamento do exame de mérito">
@@ -43,7 +43,7 @@ describe RpiMarca::Publicacao do
     </processo>
   XML
 
-  TEXTO_COMPLEMENTAR_COM_PROTOCOLO = <<-XML
+  TEXTO_COMPLEMENTAR_CONTENDO_PROTOCOLO = <<-XML
     <processo numero="905653858">
       <despachos>
         <despacho codigo="IPAS423" nome="Notificação de oposição para manifestação">
@@ -259,7 +259,7 @@ describe RpiMarca::Publicacao do
 
   context "processo" do
     it "número é identificado corretamente" do
-      publicacao = RpiMarca::Publicacao.new(PETICAO_1)
+      publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
 
       expect(publicacao.processo).to eq "829142282"
     end
@@ -296,14 +296,14 @@ describe RpiMarca::Publicacao do
       expect { RpiMarca::Publicacao.new(publicacao) }.to raise_error(RpiMarca::ParseError)
     end
 
-    it "primeiro despacho identificado corretamente" do
-      publicacao = RpiMarca::Publicacao.new(PETICAO_1)
+    it "publicação com um despacho identificado corretamente" do
+      publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
 
       expect(publicacao.despachos.length).to eq 1
     end
 
-    it "segundo despacho identificado corretamente" do
-      publicacao = RpiMarca::Publicacao.new(PETICAO_2)
+    it "publicação com 2 despachos identificados corretamente" do
+      publicacao = RpiMarca::Publicacao.new(PUBLICACAO_DOIS_DESPACHOS)
 
       expect(publicacao.despachos.length).to eq 2
     end
@@ -321,7 +321,7 @@ describe RpiMarca::Publicacao do
     end
 
     it "primeiro despacho tem dados corretos" do
-      publicacao = RpiMarca::Publicacao.new(PETICAO_2)
+      publicacao = RpiMarca::Publicacao.new(PUBLICACAO_DOIS_DESPACHOS)
       despacho = publicacao.despachos.first
 
       expect(despacho.codigo).to eq "IPAS270"
@@ -331,7 +331,7 @@ describe RpiMarca::Publicacao do
     end
 
     it "segundo despacho tem dados corretos" do
-      publicacao = RpiMarca::Publicacao.new(PETICAO_2)
+      publicacao = RpiMarca::Publicacao.new(PUBLICACAO_DOIS_DESPACHOS)
       despacho = publicacao.despachos[1] # segundo
 
       expect(despacho.codigo).to eq "IPAS009"
@@ -348,11 +348,11 @@ describe RpiMarca::Publicacao do
     end
 
     it "não tem protocolo para despachos onde não é obrigatório" do
-      expect { RpiMarca::Publicacao.new(PETICAO_SEM_PROTOCOLO) }.not_to raise_error
+      expect { RpiMarca::Publicacao.new(PUBLICACAO_SEM_PROTOCOLO) }.not_to raise_error
     end
 
     it "protocolo tem dados corretos" do
-      publicacao = RpiMarca::Publicacao.new(PETICAO_1)
+      publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
       despacho = publicacao.despachos.first
       protocolo = despacho.protocolo
 
@@ -371,7 +371,7 @@ describe RpiMarca::Publicacao do
     end
 
     it "texto complementar pode conter outros protocolos" do
-      publicacao = RpiMarca::Publicacao.new(TEXTO_COMPLEMENTAR_COM_PROTOCOLO)
+      publicacao = RpiMarca::Publicacao.new(TEXTO_COMPLEMENTAR_CONTENDO_PROTOCOLO)
       despacho = publicacao.despachos.last
 
       expect(despacho.protocolos_complemento.length).to eq 3
@@ -386,7 +386,7 @@ describe RpiMarca::Publicacao do
     end
 
     it "pode ter procurador" do
-      publicacao = RpiMarca::Publicacao.new(PETICAO_1)
+      publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
       despacho = publicacao.despachos.first
       protocolo = despacho.protocolo
 
@@ -394,7 +394,7 @@ describe RpiMarca::Publicacao do
     end
 
     it "pode ter requerente" do
-      publicacao = RpiMarca::Publicacao.new(PETICAO_1)
+      publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
       despacho = publicacao.despachos.first
       protocolo = despacho.protocolo
       requerente = protocolo.requerente
@@ -405,7 +405,7 @@ describe RpiMarca::Publicacao do
     end
 
     it "pode ter cedente e cessionário" do
-      publicacao = RpiMarca::Publicacao.new(PETICAO_1)
+      publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
       despacho = publicacao.despachos.first
       protocolo = despacho.protocolo
       cedente = protocolo.cedente
