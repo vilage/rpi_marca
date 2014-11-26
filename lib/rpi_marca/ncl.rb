@@ -14,9 +14,9 @@ module RpiMarca
       return unless el
 
       new(
-        classe: Publicacao.get_attribute_value(el, "codigo"),
-        edicao: Publicacao.get_attribute_value(el, "edicao").to_i,
-        especificacao: Publicacao.get_element_value(el.at_xpath(".//especificacao"))
+        classe: Helpers.get_attribute_value(el, "codigo"),
+        edicao: Helpers.get_attribute_value(el, "edicao").to_i,
+        especificacao: Helpers.get_element_value(el.at_xpath(".//especificacao"))
       )
     end
   end

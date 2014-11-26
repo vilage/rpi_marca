@@ -18,7 +18,7 @@ module RpiMarca
       raise ParseError, "Classe Vienna possui mais de 5 classes" if classes.length > 5
 
       new(
-        edicao: Publicacao.get_attribute_value(el, "edicao").to_i,
+        edicao: Helpers.get_attribute_value(el, "edicao").to_i,
         classe1: classes[0],
         classe2: classes[1],
         classe3: classes[2],

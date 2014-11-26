@@ -12,9 +12,9 @@ module RpiMarca
       return unless el
 
       new(
-        nome_razao_social: Publicacao.get_attribute_value(el, "nome-razao-social"),
-        pais: Publicacao.get_attribute_value(el, "pais"),
-        uf: Publicacao.get_attribute_value(el, "uf")
+        nome_razao_social: Helpers.get_attribute_value(el, "nome-razao-social"),
+        pais: Helpers.get_attribute_value(el, "pais"),
+        uf: Helpers.get_attribute_value(el, "uf")
       )
     end
   end

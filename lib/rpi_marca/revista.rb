@@ -1,3 +1,4 @@
+require "rpi_marca/helpers"
 require "rpi_marca/publicacao"
 require "nokogiri"
 
@@ -10,9 +11,9 @@ module RpiMarca
     def initialize(src)
       @source = Nokogiri::XML(src).root
 
-      @numero = Publicacao.get_attribute_value(@source, "numero").to_i
-      @data_publicacao = Publicacao.parse_date(
-        Publicacao.get_attribute_value(@source, "data")
+      @numero = Helpers.get_attribute_value(@source, "numero").to_i
+      @data_publicacao = Helpers.parse_date(
+        Helpers.get_attribute_value(@source, "data")
       )
     end
 

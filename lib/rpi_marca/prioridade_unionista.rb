@@ -14,9 +14,9 @@ module RpiMarca
       return unless el
 
       new(
-        numero: Publicacao.get_attribute_value(el, "numero"),
-        data: Publicacao.parse_date(Publicacao.get_attribute_value(el, "data")),
-        pais: Publicacao.get_attribute_value(el, "pais")
+        numero: Helpers.get_attribute_value(el, "numero"),
+        data: Helpers.parse_date(Helpers.get_attribute_value(el, "data")),
+        pais: Helpers.get_attribute_value(el, "pais")
       )
     end
   end

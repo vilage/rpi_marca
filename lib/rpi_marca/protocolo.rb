@@ -23,14 +23,14 @@ module RpiMarca
     def self.parse(el, codigo_despacho)
       return if el.nil? && DESPACHOS_PROTOCOLO_NAO_OBRIGATORIO.include?(codigo_despacho)
 
-      numero = Publicacao.get_attribute_value(el, "numero") or raise ParseError, "Número do Protocolo é obrigatório. (Despacho: #{codigo_despacho}"
-      data = Publicacao.get_attribute_value(el, "data") or raise ParseError, "Data do Protocolo é obrigatória. (Despacho: #{codigo_despacho}"
+      numero = Helpers.get_attribute_value(el, "numero") or raise ParseError, "Número do Protocolo é obrigatório. (Despacho: #{codigo_despacho}"
+      data = Helpers.get_attribute_value(el, "data") or raise ParseError, "Data do Protocolo é obrigatória. (Despacho: #{codigo_despacho}"
 
       new(
         numero: numero,
-        data: Publicacao.parse_date(data),
-        codigo_servico: Publicacao.get_attribute_value(el, "codigoServico"),
-        procurador: Publicacao.get_element_value(el.at_xpath("procurador")),
+        data: Helpers.parse_date(data),
+        codigo_servico: Helpers.get_attribute_value(el, "codigoServico"),
+        procurador: Helpers.get_element_value(el.at_xpath("procurador")),
         requerente: Titular.parse(el.at_xpath("requerente")),
         cedente: Titular.parse(el.at_xpath("cedente")),
         cessionario: Titular.parse(el.at_xpath("cessionario"))

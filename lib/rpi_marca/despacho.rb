@@ -1,5 +1,3 @@
-require 'rpi_marca/protocolo'
-
 module RpiMarca
   class Despacho
     attr_reader :codigo, :descricao, :protocolo, :complemento, :protocolos_complemento
@@ -17,12 +15,12 @@ module RpiMarca
     end
 
     def self.parse(el)
-      codigo = Publicacao.get_attribute_value(el, "codigo")
+      codigo = Helpers.get_attribute_value(el, "codigo")
 
       new(
         codigo: codigo,
-        descricao: Publicacao.get_attribute_value(el, "nome"),
-        complemento: Publicacao.get_element_value(el.at_xpath("texto-complementar")),
+        descricao: Helpers.get_attribute_value(el, "nome"),
+        complemento: Helpers.get_element_value(el.at_xpath("texto-complementar")),
         protocolo: Protocolo.parse(el.at_xpath("protocolo"), codigo)
       )
     end
@@ -32,7 +30,7 @@ module RpiMarca
       @protocolos_complemento = @complemento.scan(PROTOCOLOS_TEXTO_COMPLEMENTAR).map do |protocolo, data|
         Protocolo.new(
           numero: protocolo,
-          data: Publicacao.parse_date(data)
+          data: Helpers.parse_date(data)
         )
       end
     end

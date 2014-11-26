@@ -1,3 +1,4 @@
+require "rpi_marca/helpers"
 require "rpi_marca/titular"
 require "rpi_marca/protocolo"
 require "rpi_marca/despacho"
@@ -51,27 +52,12 @@ module RpiMarca
       parse
     end
 
-    def self.get_attribute_value(element, attr)
-      return nil unless element
-
-      value = element[attr]
-      value unless value.nil? || value.empty?
-    end
-
-    def self.get_element_value(element)
-      return element.text unless element.nil? || element.text == ""
-    end
-
-    def self.parse_date(value)
-      Date.strptime(value, "%d/%m/%Y") if value
-    end
-
     protected
     def parse
-      @processo = Publicacao.get_attribute_value(@publicacao, "numero") or raise ParseError
-      @deposito = Publicacao.parse_date(Publicacao.get_attribute_value(@publicacao, "data-deposito"))
-      @concessao = Publicacao.parse_date(Publicacao.get_attribute_value(@publicacao, "data-concessao"))
-      @vigencia = Publicacao.parse_date(Publicacao.get_attribute_value(@publicacao, "data-vigencia"))
+      @processo = Helpers.get_attribute_value(@publicacao, "numero") or raise ParseError
+      @deposito = Helpers.parse_date(Helpers.get_attribute_value(@publicacao, "data-deposito"))
+      @concessao = Helpers.parse_date(Helpers.get_attribute_value(@publicacao, "data-concessao"))
+      @vigencia = Helpers.parse_date(Helpers.get_attribute_value(@publicacao, "data-vigencia"))
 
       raise ParseError if @concessao && @vigencia.nil?
       raise ParseError if @vigencia && @concessao.nil?
@@ -96,7 +82,7 @@ module RpiMarca
     end
 
     def parse_procurador(el)
-      @procurador = Publicacao.get_element_value(el)
+      @procurador = Helpers.get_element_value(el)
     end
 
     def parse_titulares(el)
@@ -108,9 +94,9 @@ module RpiMarca
     end
 
     def parse_marca(el)
-      @marca = Publicacao.get_element_value(el.at_xpath(".//nome"))
-      @apresentacao = Publicacao.get_attribute_value(el, "apresentacao")
-      @natureza = NATUREZA_NORMALIZACAO.fetch(Publicacao.get_attribute_value(el, "natureza")) { |default| default }
+      @marca = Helpers.get_element_value(el.at_xpath(".//nome"))
+      @apresentacao = Helpers.get_attribute_value(el, "apresentacao")
+      @natureza = NATUREZA_NORMALIZACAO.fetch(Helpers.get_attribute_value(el, "natureza")) { |default| default }
     end
 
     def parse_classe_nice(el)
@@ -130,7 +116,7 @@ module RpiMarca
     end
 
     def parse_apostila(el)
-      @apostila = Publicacao.get_element_value(el)
+      @apostila = Helpers.get_element_value(el)
     end
   end
 end

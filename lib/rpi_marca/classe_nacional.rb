@@ -19,11 +19,11 @@ module RpiMarca
       raise ParseError, "Classe nacional possui mais de 3 subclasses" if subclasses.length > 3
 
       new(
-        classe: Publicacao.get_attribute_value(el, "codigo").to_i,
+        classe: Helpers.get_attribute_value(el, "codigo").to_i,
         subclasse1: subclasses[0].to_i,
         subclasse2: subclasses[1].to_i,
         subclasse3: subclasses[2].to_i,
-        especificacao: Publicacao.get_element_value(el.at_xpath(".//especificacao")),
+        especificacao: Helpers.get_element_value(el.at_xpath(".//especificacao")),
       )
     end
   end
