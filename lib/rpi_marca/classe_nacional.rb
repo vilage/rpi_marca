@@ -23,7 +23,7 @@ module RpiMarca
         subclasse1: subclasses[0].to_i,
         subclasse2: subclasses[1].to_i,
         subclasse3: subclasses[2].to_i,
-        especificacao: Helpers.get_element_value(el.at_xpath(".//especificacao")),
+        especificacao: Helpers.get_element_value(el.at_xpath(".//especificacao"))
       )
     end
   end

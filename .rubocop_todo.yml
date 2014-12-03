@@ -51,12 +51,6 @@ Style/RegexpLiteral:
 Style/StringLiterals:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-Style/TrailingComma:
-  Enabled: false
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Style/UnneededPercentQ:
