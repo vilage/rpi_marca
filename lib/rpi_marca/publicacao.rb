@@ -33,36 +33,36 @@ module RpiMarca
     }
 
     def initialize(publicacao)
-      @publicacao =
-        if publicacao.is_a? Nokogiri::XML::Element
-          publicacao
-        elsif publicacao.is_a? String
-          Nokogiri::XML(publicacao).at_xpath("//processo")
-        else
-          raise ParseError, "Publicação em formato inválido: #{publicacao.class}"
-        end
-
-      raise ParseError if @publicacao.name != "processo"
-
       @despachos = []
       @titulares = []
       @sobrestadores = []
       @prioridades = []
 
-      parse
+      element = validate_and_parse_publicacao(publicacao)
+      parse_xml_elements(element)
     end
 
     protected
-    def parse
-      @processo = Helpers.get_attribute_value(@publicacao, "numero") or raise ParseError
-      @deposito = Helpers.parse_date(Helpers.get_attribute_value(@publicacao, "data-deposito"))
-      @concessao = Helpers.parse_date(Helpers.get_attribute_value(@publicacao, "data-concessao"))
-      @vigencia = Helpers.parse_date(Helpers.get_attribute_value(@publicacao, "data-vigencia"))
 
-      raise ParseError if @concessao && @vigencia.nil?
-      raise ParseError if @vigencia && @concessao.nil?
+    def validate_and_parse_publicacao(element)
+      element =
+        if element.is_a? Nokogiri::XML::Element
+          element
+        elsif element.is_a? String
+          Nokogiri::XML(element).at_xpath("//processo")
+        else
+          raise ParseError, "Publicação em formato inválido: #{element.class}"
+        end
 
-      @publicacao.elements.each do |el|
+      raise ParseError if element.name != "processo"
+
+      element
+    end
+
+    def parse_xml_elements(publicacao)
+      parse_processo(publicacao)
+
+      publicacao.elements.each do |el|
         normalized_element_name = el.name.gsub("-", "_")
         parse_method = "parse_#{normalized_element_name}".to_sym
 
@@ -72,6 +72,17 @@ module RpiMarca
 
         __send__(parse_method, el)
       end
+    end
+
+    def parse_processo(el)
+      @processo = Helpers.get_attribute_value(el, "numero") or raise ParseError
+      @deposito = Helpers.parse_date(Helpers.get_attribute_value(el, "data-deposito"))
+
+      @concessao = Helpers.parse_date(Helpers.get_attribute_value(el, "data-concessao"))
+      @vigencia = Helpers.parse_date(Helpers.get_attribute_value(el, "data-vigencia"))
+
+      raise ParseError if @concessao && @vigencia.nil?
+      raise ParseError if @vigencia && @concessao.nil?
     end
 
     def parse_despachos(el)

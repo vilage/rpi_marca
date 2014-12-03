@@ -29,13 +29,21 @@ module RpiMarca
       new(
         numero: numero,
         data: Helpers.parse_date(data),
+        **optional_params(el)
+      )
+    end
+
+    def self.optional_params(el)
+      {
         codigo_servico: Helpers.get_attribute_value(el, "codigoServico"),
         procurador: Helpers.get_element_value(el.at_xpath("procurador")),
         requerente: Titular.parse(el.at_xpath("requerente")),
         cedente: Titular.parse(el.at_xpath("cedente")),
         cessionario: Titular.parse(el.at_xpath("cessionario"))
-      )
+      }
     end
+
+    private_class_method :optional_params
 
     private
     def format_codigo_servico(codigo)
