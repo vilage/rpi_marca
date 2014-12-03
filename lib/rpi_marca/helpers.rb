@@ -1,6 +1,5 @@
 module RpiMarca
   class Helpers
-
     def self.get_attribute_value(element, attr)
       return nil unless element
 
