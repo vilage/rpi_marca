@@ -282,7 +282,7 @@ describe RpiMarca::Publicacao do
   it "erro ao instanciar com informações de publicação inválidas" do
     class Foo; end
 
-    expect { RpiMarca::Publicacao.new(Foo.new)}.to raise_error RpiMarca::ParseError
+    expect { RpiMarca::Publicacao.new(Foo.new) }.to raise_error RpiMarca::ParseError
   end
 
   it "erro quando um elemento novo/inválido for publicado" do
