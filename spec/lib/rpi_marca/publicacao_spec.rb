@@ -286,7 +286,7 @@ describe RpiMarca::Publicacao do
   end
 
   it "erro quando um elemento novo/inválido for publicado" do
-      expect { RpiMarca::Publicacao.new(PUBLICACAO_ELEMENTO_NOVO_INVALIDO) }.to raise_error RpiMarca::ParseError
+    expect { RpiMarca::Publicacao.new(PUBLICACAO_ELEMENTO_NOVO_INVALIDO) }.to raise_error RpiMarca::ParseError
   end
 
   context "processo" do
