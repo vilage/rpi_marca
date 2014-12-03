@@ -2,7 +2,7 @@ module RpiMarca
   class Despacho
     attr_reader :codigo, :descricao, :protocolo, :complemento, :protocolos_complemento
 
-    PROTOCOLOS_TEXTO_COMPLEMENTAR = Regexp.new(/(?<protocolo>[0-9]{12,}) de (?<dataprotocolo>[0-9]{2}\/[0-9]{2}\/[0-9]{4})/)
+    PROTOCOLOS_TEXTO_COMPLEMENTAR = Regexp.new(%r{(?<protocolo>[0-9]{12,}) de (?<dataprotocolo>[0-9]{2}/[0-9]{2}/[0-9]{4})})
 
     def initialize(codigo:, descricao:, complemento:, protocolo:)
       @codigo = codigo or raise ParseError

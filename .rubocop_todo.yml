@@ -41,7 +41,9 @@ Style/Documentation:
 # Offense count: 5
 # Configuration parameters: MaxSlashes.
 Style/RegexpLiteral:
-  Enabled: false
+  Exclude:
+    - 'Guardfile'
+    - '**/*.gemspec'
 
 # Offense count: 16
 # Cop supports --auto-correct.
