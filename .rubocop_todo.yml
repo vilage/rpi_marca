@@ -54,7 +54,9 @@ Style/StringLiterals:
 # Offense count: 2
 # Cop supports --auto-correct.
 Style/UnneededPercentQ:
-  Enabled: false
+  Exclude:
+    - '**/*.gemspec'
+
 
 # Offense count: 1
 # Cop supports --auto-correct.
