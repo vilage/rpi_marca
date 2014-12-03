@@ -34,11 +34,6 @@ Metrics/ParameterLists:
 Style/AndOr:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/BlockComments:
-  Enabled: false
-
 # Offense count: 13
 Style/Documentation:
   Enabled: false
