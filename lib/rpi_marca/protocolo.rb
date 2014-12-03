@@ -46,6 +46,7 @@ module RpiMarca
     private_class_method :optional_params
 
     private
+
     def format_codigo_servico(codigo)
       return unless codigo
 

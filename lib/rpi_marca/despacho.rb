@@ -26,6 +26,7 @@ module RpiMarca
     end
 
     private
+
     def parse_texto_complementar
       @protocolos_complemento = @complemento.scan(PROTOCOLOS_TEXTO_COMPLEMENTAR).map do |protocolo, data|
         Protocolo.new(
