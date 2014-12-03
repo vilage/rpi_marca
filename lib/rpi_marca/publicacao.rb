@@ -66,9 +66,7 @@ module RpiMarca
         normalized_element_name = el.name.gsub("-", "_")
         parse_method = "parse_#{normalized_element_name}".to_sym
 
-        unless respond_to?(parse_method, true)
-          raise ParseError
-        end
+        raise ParseError unless respond_to?(parse_method, true)
 
         __send__(parse_method, el)
       end
