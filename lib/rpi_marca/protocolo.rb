@@ -2,13 +2,11 @@ module RpiMarca
   class Protocolo
     attr_reader :numero, :data, :codigo_servico, :procurador, :requerente, :cedente, :cessionario
 
-    DESPACHOS_PROTOCOLO_NAO_OBRIGATORIO = [
-      "IPAS005", "IPAS009", "IPAS024", "IPAS033", "IPAS029", "IPAS047",
-      "IPAS091", "IPAS106", "IPAS112", "IPAS135", "IPAS136", "IPAS139",
-      "IPAS142", "IPAS157", "IPAS158", "IPAS161", "IPAS289", "IPAS291",
-      "IPAS304", "IPAS395", "IPAS402", "IPAS404", "IPAS409", "IPAS421",
-      "IPAS423"
-    ]
+    DESPACHOS_PROTOCOLO_NAO_OBRIGATORIO = %w(
+      IPAS005 IPAS009 IPAS024 IPAS033 IPAS029 IPAS047 IPAS091 IPAS106 IPAS112
+      IPAS135 IPAS136 IPAS139 IPAS142 IPAS157 IPAS158 IPAS161 IPAS289 IPAS291
+      IPAS304 IPAS395 IPAS402 IPAS404 IPAS409 IPAS421 IPAS423
+    )
 
     def initialize(numero:, data:, codigo_servico: nil, procurador: nil, requerente: nil, cedente: nil, cessionario: nil)
       @numero = numero
