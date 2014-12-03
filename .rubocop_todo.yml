@@ -20,8 +20,13 @@ Metrics/LineLength:
 
 # Offense count: 2
 # Configuration parameters: CountKeywordArgs.
+#
+# Métodos inicializadores. Mantidos para saber quais os argumentos
+# possíveis.
 Metrics/ParameterLists:
-  Max: 7
+  Exclude:
+    - '**/classe_vienna.rb'
+    - '**/protocolo.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
