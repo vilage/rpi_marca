@@ -5,8 +5,8 @@ module RpiMarca
     PROTOCOLOS_TEXTO_COMPLEMENTAR = Regexp.new(%r{(?<protocolo>[0-9]{12,}) de (?<dataprotocolo>[0-9]{2}/[0-9]{2}/[0-9]{4})})
 
     def initialize(codigo:, descricao:, complemento:, protocolo:)
-      @codigo = codigo or raise ParseError
-      @descricao = descricao or raise ParseError
+      @codigo = codigo or fail ParseError
+      @descricao = descricao or fail ParseError
       @complemento = complemento
       @protocolo = protocolo
       @protocolos_complemento = []

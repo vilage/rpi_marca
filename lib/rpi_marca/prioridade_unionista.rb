@@ -3,7 +3,7 @@ module RpiMarca
     attr_reader :numero, :data, :pais
 
     def initialize(numero:, data:, pais:)
-      raise ParseError, "Publicação unionista deve ter data da prioridade" unless data
+      fail ParseError, "Publicação unionista deve ter data da prioridade" unless data
 
       @numero = numero
       @data = data

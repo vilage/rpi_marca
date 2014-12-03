@@ -23,8 +23,8 @@ module RpiMarca
     def self.parse(el, codigo_despacho)
       return if el.nil? && DESPACHOS_PROTOCOLO_NAO_OBRIGATORIO.include?(codigo_despacho)
 
-      numero = Helpers.get_attribute_value(el, "numero") or raise ParseError, "Número do Protocolo é obrigatório. (Despacho: #{codigo_despacho}"
-      data = Helpers.get_attribute_value(el, "data") or raise ParseError, "Data do Protocolo é obrigatória. (Despacho: #{codigo_despacho}"
+      numero = Helpers.get_attribute_value(el, "numero") or fail ParseError, "Número do Protocolo é obrigatório. (Despacho: #{codigo_despacho}"
+      data = Helpers.get_attribute_value(el, "data") or fail ParseError, "Data do Protocolo é obrigatória. (Despacho: #{codigo_despacho}"
 
       new(
         numero: numero,

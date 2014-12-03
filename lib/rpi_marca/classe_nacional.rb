@@ -3,7 +3,7 @@ module RpiMarca
     attr_reader :classe, :subclasse1, :subclasse2, :subclasse3, :especificacao
 
     def initialize(classe:, subclasse1:, subclasse2:, subclasse3:, especificacao:)
-      raise ParseError, "Classe nacional #{classe} inválida" unless (1..41).include?(classe.to_i)
+      fail ParseError, "Classe nacional #{classe} inválida" unless (1..41).include?(classe.to_i)
 
       @classe = classe
       @subclasse1 = subclasse1 if subclasse1 > 0
@@ -16,7 +16,7 @@ module RpiMarca
       return unless el
 
       subclasses = el.xpath(".//sub-classe-nacional").map { |s| s["codigo"] }
-      raise ParseError, "Classe nacional possui mais de 3 subclasses" if subclasses.length > 3
+      fail ParseError, "Classe nacional possui mais de 3 subclasses" if subclasses.length > 3
 
       new(
         classe: Helpers.get_attribute_value(el, "codigo").to_i,

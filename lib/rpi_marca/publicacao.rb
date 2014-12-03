@@ -51,10 +51,10 @@ module RpiMarca
         elsif element.is_a? String
           Nokogiri::XML(element).at_xpath("//processo")
         else
-          raise ParseError, "Publicação em formato inválido: #{element.class}"
+          fail ParseError, "Publicação em formato inválido: #{element.class}"
         end
 
-      raise ParseError if element.name != "processo"
+      fail ParseError if element.name != "processo"
 
       element
     end
@@ -66,26 +66,26 @@ module RpiMarca
         normalized_element_name = el.name.gsub("-", "_")
         parse_method = "parse_#{normalized_element_name}".to_sym
 
-        raise ParseError unless respond_to?(parse_method, true)
+        fail ParseError unless respond_to?(parse_method, true)
 
         __send__(parse_method, el)
       end
     end
 
     def parse_processo(el)
-      @processo = Helpers.get_attribute_value(el, "numero") or raise ParseError
+      @processo = Helpers.get_attribute_value(el, "numero") or fail ParseError
       @deposito = Helpers.parse_date(Helpers.get_attribute_value(el, "data-deposito"))
 
       @concessao = Helpers.parse_date(Helpers.get_attribute_value(el, "data-concessao"))
       @vigencia = Helpers.parse_date(Helpers.get_attribute_value(el, "data-vigencia"))
 
-      raise ParseError if @concessao && @vigencia.nil?
-      raise ParseError if @vigencia && @concessao.nil?
+      fail ParseError if @concessao && @vigencia.nil?
+      fail ParseError if @vigencia && @concessao.nil?
     end
 
     def parse_despachos(el)
       el = el.elements
-      raise ParseError if el.empty?
+      fail ParseError if el.empty?
 
       @despachos = el.map { |despacho| Despacho.parse(despacho) }
     end

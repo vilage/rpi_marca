@@ -3,7 +3,7 @@ module RpiMarca
     attr_reader :classe, :edicao, :especificacao
 
     def initialize(classe:, edicao:, especificacao:)
-      raise ParseError, "NCL #{classe} inválida" unless (1..45).include?(classe.to_i)
+      fail ParseError, "NCL #{classe} inválida" unless (1..45).include?(classe.to_i)
 
       @classe = classe
       @edicao = edicao if edicao > 0

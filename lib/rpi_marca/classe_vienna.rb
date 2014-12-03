@@ -15,7 +15,7 @@ module RpiMarca
       return unless el
 
       classes = el.xpath(".//classe-vienna").map { |s| s["codigo"] }
-      raise ParseError, "Classe Vienna possui mais de 5 classes" if classes.length > 5
+      fail ParseError, "Classe Vienna possui mais de 5 classes" if classes.length > 5
 
       new(
         edicao: Helpers.get_attribute_value(el, "edicao").to_i,
