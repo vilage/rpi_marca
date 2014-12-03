@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = RpiMarca::VERSION
   spec.authors       = ["Luiz Damim"]
   spec.email         = ["luizdamim@outlook.com"]
-  spec.summary       = %q{Leitura da RPI de Marcas do INPI em formato XML.}
-  spec.description   = %q{Faz a leitura da RPI de Marcas do INPI em formato XML, transformando em um objeto Ruby para processamento.}
+  spec.summary       = %q(Leitura da RPI de Marcas do INPI em formato XML.)
+  spec.description   = %q(Faz a leitura da RPI de Marcas do INPI em formato XML, transformando em um objeto Ruby para processamento.)
   spec.homepage      = "https://github.com/automatto/rpi_marca"
   spec.license       = "MIT"
 
