@@ -11,8 +11,8 @@ module RpiMarca
       return unless el
 
       new(
-        processo: Helpers.get_attribute_value(el, "processo"),
-        marca: Helpers.get_attribute_value(el, "marca")
+        processo: Helpers.get_attribute_value(el, 'processo'),
+        marca: Helpers.get_attribute_value(el, 'marca')
       )
     end
   end

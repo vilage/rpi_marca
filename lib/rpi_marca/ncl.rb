@@ -3,7 +3,8 @@ module RpiMarca
     attr_reader :classe, :edicao, :especificacao
 
     def initialize(classe:, edicao:, especificacao:)
-      raise ParseError, "NCL #{classe} inválida" unless (1..45).include?(classe.to_i)
+      fail ParseError, "NCL #{classe} inválida" unless
+        (1..45).include?(classe.to_i)
 
       @classe = classe
       @edicao = edicao if edicao > 0
@@ -14,9 +15,11 @@ module RpiMarca
       return unless el
 
       new(
-        classe: Helpers.get_attribute_value(el, "codigo"),
-        edicao: Helpers.get_attribute_value(el, "edicao").to_i,
-        especificacao: Helpers.get_element_value(el.at_xpath(".//especificacao"))
+        classe: Helpers.get_attribute_value(el, 'codigo'),
+        edicao: Helpers.get_attribute_value(el, 'edicao').to_i,
+        especificacao: Helpers.get_element_value(
+          el.at_xpath('.//especificacao')
+        )
       )
     end
   end

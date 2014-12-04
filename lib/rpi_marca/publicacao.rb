@@ -1,13 +1,13 @@
-require "rpi_marca/helpers"
-require "rpi_marca/titular"
-require "rpi_marca/protocolo"
-require "rpi_marca/despacho"
-require "rpi_marca/ncl"
-require "rpi_marca/classe_nacional"
-require "rpi_marca/classe_vienna"
-require "rpi_marca/prioridade_unionista"
-require "rpi_marca/sobrestador"
-require "nokogiri"
+require 'rpi_marca/helpers'
+require 'rpi_marca/titular'
+require 'rpi_marca/protocolo'
+require 'rpi_marca/despacho'
+require 'rpi_marca/ncl'
+require 'rpi_marca/classe_nacional'
+require 'rpi_marca/classe_vienna'
+require 'rpi_marca/prioridade_unionista'
+require 'rpi_marca/sobrestador'
+require 'nokogiri'
 
 module RpiMarca
   class Publicacao
@@ -29,54 +29,66 @@ module RpiMarca
     attr_reader :prioridades
 
     NATUREZA_NORMALIZACAO = {
-      "Certific." => "Certificação"
+      'Certific.' => 'Certificação'
     }
 
     def initialize(publicacao)
-      @publicacao =
-        if publicacao.is_a? Nokogiri::XML::Element
-          publicacao
-        elsif publicacao.is_a? String
-          Nokogiri::XML(publicacao).at_xpath("//processo")
-        else
-          raise ParseError, "Publicação em formato inválido: #{publicacao.class}"
-        end
-
-      raise ParseError if @publicacao.name != "processo"
-
       @despachos = []
       @titulares = []
       @sobrestadores = []
       @prioridades = []
 
-      parse
+      element = validate_and_parse_publicacao(publicacao)
+      parse_xml_elements(element)
     end
 
     protected
-    def parse
-      @processo = Helpers.get_attribute_value(@publicacao, "numero") or raise ParseError
-      @deposito = Helpers.parse_date(Helpers.get_attribute_value(@publicacao, "data-deposito"))
-      @concessao = Helpers.parse_date(Helpers.get_attribute_value(@publicacao, "data-concessao"))
-      @vigencia = Helpers.parse_date(Helpers.get_attribute_value(@publicacao, "data-vigencia"))
 
-      raise ParseError if @concessao && @vigencia.nil?
-      raise ParseError if @vigencia && @concessao.nil?
+    def validate_and_parse_publicacao(element)
+      element =
+        if element.is_a? Nokogiri::XML::Element
+          element
+        elsif element.is_a? String
+          Nokogiri::XML(element).at_xpath('//processo')
+        else
+          fail ParseError, "Publicação em formato inválido: #{element.class}"
+        end
 
-      @publicacao.elements.each do |el|
-        normalized_element_name = el.name.gsub("-", "_")
+      fail ParseError if element.name != 'processo'
+
+      element
+    end
+
+    def parse_xml_elements(publicacao)
+      parse_processo(publicacao)
+
+      publicacao.elements.each do |el|
+        normalized_element_name = el.name.gsub('-', '_')
         parse_method = "parse_#{normalized_element_name}".to_sym
 
-        unless respond_to?(parse_method, true)
-          raise ParseError
-        end
+        fail ParseError unless respond_to?(parse_method, true)
 
         __send__(parse_method, el)
       end
     end
 
+    def parse_processo(el)
+      @processo = Helpers.get_attribute_value(el, 'numero') or fail ParseError
+      @deposito =
+        Helpers.parse_date(Helpers.get_attribute_value(el, 'data-deposito'))
+
+      @concessao =
+        Helpers.parse_date(Helpers.get_attribute_value(el, 'data-concessao'))
+      @vigencia =
+        Helpers.parse_date(Helpers.get_attribute_value(el, 'data-vigencia'))
+
+      fail ParseError if @concessao && @vigencia.nil?
+      fail ParseError if @vigencia && @concessao.nil?
+    end
+
     def parse_despachos(el)
       el = el.elements
-      raise ParseError if el.empty?
+      fail ParseError if el.empty?
 
       @despachos = el.map { |despacho| Despacho.parse(despacho) }
     end
@@ -90,13 +102,14 @@ module RpiMarca
     end
 
     def parse_sobrestadores(el)
-      @sobrestadores = el.elements.map { |sobrestador| Sobrestador.parse(sobrestador) }
+      @sobrestadores = el.elements.map { |sobrest| Sobrestador.parse(sobrest) }
     end
 
     def parse_marca(el)
-      @marca = Helpers.get_element_value(el.at_xpath(".//nome"))
-      @apresentacao = Helpers.get_attribute_value(el, "apresentacao")
-      @natureza = NATUREZA_NORMALIZACAO.fetch(Helpers.get_attribute_value(el, "natureza")) { |default| default }
+      @marca = Helpers.get_element_value(el.at_xpath('.//nome'))
+      @apresentacao = Helpers.get_attribute_value(el, 'apresentacao')
+      natureza = Helpers.get_attribute_value(el, 'natureza')
+      @natureza = NATUREZA_NORMALIZACAO.fetch(natureza, natureza)
     end
 
     def parse_classe_nice(el)
@@ -112,7 +125,7 @@ module RpiMarca
     end
 
     def parse_prioridade_unionista(el)
-      @prioridades = el.elements.map { |prioridade| PrioridadeUnionista.parse(prioridade) }
+      @prioridades = el.elements.map { |prio| PrioridadeUnionista.parse(prio) }
     end
 
     def parse_apostila(el)
