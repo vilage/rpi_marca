@@ -8,14 +8,17 @@ Gem::Specification.new do |spec|
   spec.version       = RpiMarca::VERSION
   spec.authors       = ['Luiz Damim']
   spec.email         = ['luizdamim@outlook.com']
-  spec.summary       = %q(Leitura da RPI de Marcas do INPI em formato XML.)
-  spec.description   = %q(Faz a leitura da RPI de Marcas do INPI em formato XML, transformando em um objeto Ruby para processamento.)
+  spec.summary       = 'Leitura da RPI de Marcas do INPI em formato XML.'
+  spec.description   = <<-EOF
+    Faz a leitura da RPI de Marcas do INPI em formato XML, transformando em um
+    objeto Ruby para processamento.
+  EOF
   spec.homepage      = 'https://github.com/automatto/rpi_marca'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
-  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.executables   = spec.files.grep(/^bin\//) { |f| File.basename(f) }
+  spec.test_files    = spec.files.grep(/^(test|spec|features)\//)
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 1.7'

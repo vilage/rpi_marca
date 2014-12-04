@@ -13,13 +13,6 @@ Metrics/AbcSize:
 Metrics/CyclomaticComplexity:
   Max: 7
 
-# Offense count: 104
-# Configuration parameters: AllowURI, URISchemes.
-Metrics/LineLength:
-  Exclude:
-    - '**/*.gemspec'
-    - 'spec/spec_helper.rb'
-
 # Offense count: 2
 # Configuration parameters: CountKeywordArgs.
 #
@@ -39,16 +32,3 @@ Style/AndOr:
 # Offense count: 13
 Style/Documentation:
   Enabled: false
-
-# Offense count: 5
-# Configuration parameters: MaxSlashes.
-Style/RegexpLiteral:
-  Exclude:
-    - 'Guardfile'
-    - '**/*.gemspec'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/UnneededPercentQ:
-  Exclude:
-    - '**/*.gemspec'
