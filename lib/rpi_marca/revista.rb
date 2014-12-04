@@ -19,14 +19,17 @@ module RpiMarca
 
     def each
       if block_given?
-        @source.xpath("//processo").each { |publicacao| yield Publicacao.new(publicacao) }
+        @source.xpath("//processo").each { |el| yield Publicacao.new(el) }
       else
         to_enum(:each)
       end
     end
 
     def valid?
-      schema = File.join(File.dirname(File.expand_path(__FILE__)), "rpi_marca.xsd")
+      schema = File.join(
+        File.dirname(File.expand_path(__FILE__)),
+        "rpi_marca.xsd"
+      )
       File.open(schema, "r") do |f|
         Nokogiri::XML::Schema(f).valid?(@source.document)
       end

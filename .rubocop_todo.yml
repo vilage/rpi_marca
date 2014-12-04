@@ -16,7 +16,9 @@ Metrics/CyclomaticComplexity:
 # Offense count: 104
 # Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:
-  Max: 1466
+  Exclude:
+    - '**/*.gemspec'
+    - 'spec/spec_helper.rb'
 
 # Offense count: 2
 # Configuration parameters: CountKeywordArgs.

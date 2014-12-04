@@ -3,6 +3,7 @@ require "rpi_marca/exceptions"
 require "nokogiri"
 
 describe RpiMarca::Publicacao do
+  # rubocop:disable Metrics/LineLength
   PUBLICACAO_PROTOCOLO_COMPLETO = <<-PUBLICACAO
     <processo numero="829142282">
       <despachos>
@@ -44,7 +45,7 @@ describe RpiMarca::Publicacao do
     </processo>
   PUBLICACAO
 
-  TEXTO_COMPLEMENTAR_CONTENDO_PROTOCOLO = <<-PUBLICACAO
+  TEXTO_COMPLEMENTAR_COM_PROTOCOLO = <<-PUBLICACAO
     <processo numero="905653858">
       <despachos>
         <despacho codigo="IPAS423" nome="Notificação de oposição para manifestação">
@@ -266,6 +267,7 @@ describe RpiMarca::Publicacao do
       <foo/>
     </processo>
   PUBLICACAO
+  # rubocop:enable Metrics/LineLength
 
   it "aceita uma string contendo a publicação" do
     publicacao = DEPOSITO
@@ -282,11 +284,13 @@ describe RpiMarca::Publicacao do
   it "erro ao instanciar com informações de publicação inválidas" do
     class Foo; end
 
-    expect { RpiMarca::Publicacao.new(Foo.new) }.to raise_error RpiMarca::ParseError
+    expect { RpiMarca::Publicacao.new(Foo.new) }
+      .to raise_error RpiMarca::ParseError
   end
 
   it "erro quando um elemento novo/inválido for publicado" do
-    expect { RpiMarca::Publicacao.new(PUBLICACAO_ELEMENTO_NOVO_INVALIDO) }.to raise_error RpiMarca::ParseError
+    expect { RpiMarca::Publicacao.new(PUBLICACAO_ELEMENTO_NOVO_INVALIDO) }
+      .to raise_error RpiMarca::ParseError
   end
 
   context "processo" do
@@ -297,7 +301,8 @@ describe RpiMarca::Publicacao do
     end
 
     it "erro quando número não é identificado" do
-      expect { RpiMarca::Publicacao.new('<processo numero=""></processo>') }.to raise_error(RpiMarca::ParseError)
+      expect { RpiMarca::Publicacao.new('<processo numero=""></processo>') }
+        .to raise_error(RpiMarca::ParseError)
     end
 
     it "pode ter data de deposito" do
@@ -314,18 +319,26 @@ describe RpiMarca::Publicacao do
     end
 
     it "se tiver data de concessão deve ter data de vigência" do
-      expect { RpiMarca::Publicacao.new(CONCESSAO_REGISTRO_SEM_DATA_VIGENCIA) }.to raise_error(RpiMarca::ParseError)
+      expect { RpiMarca::Publicacao.new(CONCESSAO_REGISTRO_SEM_DATA_VIGENCIA) }
+        .to raise_error(RpiMarca::ParseError)
     end
 
     it "se tiver data de vigência deve ter data de concessao" do
-      expect { RpiMarca::Publicacao.new(CONCESSAO_REGISTRO_SEM_DATA_CONCESSAO) }.to raise_error(RpiMarca::ParseError)
+      expect { RpiMarca::Publicacao.new(CONCESSAO_REGISTRO_SEM_DATA_CONCESSAO) }
+        .to raise_error(RpiMarca::ParseError)
     end
   end
 
   context "lista de despachos" do
     it "erro quando nenhum é publicado" do
-      publicacao = '<processo numero="829142282"><despachos></despachos></processo>'
-      expect { RpiMarca::Publicacao.new(publicacao) }.to raise_error(RpiMarca::ParseError)
+      publicacao = <<-PUBLICACAO
+        <processo numero="829142282">
+          <despachos/>
+        </processo>
+      PUBLICACAO
+
+      expect { RpiMarca::Publicacao.new(publicacao) }
+        .to raise_error(RpiMarca::ParseError)
     end
 
     it "publicação com um despacho identificado corretamente" do
@@ -343,13 +356,29 @@ describe RpiMarca::Publicacao do
 
   context "despacho" do
     it "erro quando não possuir código IPAS" do
-      publicacao = '<processo numero="829142282"><despachos><despacho codigo=""></despacho></despachos></processo>'
-      expect { RpiMarca::Publicacao.new(publicacao) }.to raise_error(RpiMarca::ParseError)
+      publicacao = <<-PUBLICACAO
+        <processo numero="829142282">
+          <despachos>
+            <despacho codigo=""/>
+          </despachos>
+        </processo>
+      PUBLICACAO
+
+      expect { RpiMarca::Publicacao.new(publicacao) }
+        .to raise_error(RpiMarca::ParseError)
     end
 
     it "erro quando não possuir descrição do código IPAS" do
-      publicacao = '<processo numero="829142282"><despachos><despacho codigo="IPAS009"></despacho></despachos></processo>'
-      expect { RpiMarca::Publicacao.new(publicacao) }.to raise_error(RpiMarca::ParseError)
+      publicacao = <<-PUBLICACAO
+        <processo numero="829142282">
+          <despachos>
+            <despacho codigo="IPAS009"/>
+          </despachos>
+        </processo>
+      PUBLICACAO
+
+      expect { RpiMarca::Publicacao.new(publicacao) }
+        .to raise_error(RpiMarca::ParseError)
     end
 
     it "primeiro despacho tem dados corretos" do
@@ -359,7 +388,12 @@ describe RpiMarca::Publicacao do
       expect(despacho.codigo).to eq "IPAS270"
       expect(despacho.protocolo.numero).to eq "810110405339"
       expect(despacho.protocolo.data).to eq Date.new(2013, 7, 1)
-      expect(despacho.complemento).to eq "Protocolo: 810110405339 (17/03/2011) Petição (tipo): Anotação de transferência de titularidade decorrente de cisão (349.2) Procurador: CUSTODIO DE ALMEIDA CIA Cedente: I-PARK SOLUÇÕES TECNOLÓGICAS S.A. [BR] Cessionário: I-PARK SOLUÇÕES TECNOLÓGICAS S.A. Detalhes do despacho: ok!"
+      expect(despacho.complemento)
+        .to eq "Protocolo: 810110405339 (17/03/2011) Petição (tipo): Anotação" \
+          " de transferência de titularidade decorrente de cisão (349.2) " \
+          "Procurador: CUSTODIO DE ALMEIDA CIA Cedente: I-PARK SOLUÇÕES " \
+          "TECNOLÓGICAS S.A. [BR] Cessionário: I-PARK SOLUÇÕES TECNOLÓGICAS " \
+          "S.A. Detalhes do despacho: ok!"
     end
 
     it "segundo despacho tem dados corretos" do
@@ -375,12 +409,25 @@ describe RpiMarca::Publicacao do
 
   context "protocolo" do
     it "deve ter protocolo para despachos onde é obrigatório" do
-      xml = '<processo numero="905653858"><despachos><despacho codigo="IPAS270" nome="Notificação de oposição para manifestação"><texto-complementar>850130127025 de 02/07/2013, 850130131596 de 08/07/2013 e 850130122879 de 28/06/2013</texto-complementar></despacho></despachos></processo>'
-      expect { RpiMarca::Publicacao.new(xml) }.to raise_error(RpiMarca::ParseError)
+      # rubocop:disable Metrics/LineLength
+      xml = <<-PUBLICACAO
+        <processo numero="905653858">
+          <despachos>
+            <despacho codigo="IPAS270" nome="Notificação de oposição para manifestação">
+              <texto-complementar>850130127025 de 02/07/2013, 850130131596 de 08/07/2013 e 850130122879 de 28/06/2013</texto-complementar>
+            </despacho>
+          </despachos>
+        </processo>
+      PUBLICACAO
+      # rubocop:enable Metrics/LineLength
+
+      expect { RpiMarca::Publicacao.new(xml) }
+        .to raise_error(RpiMarca::ParseError)
     end
 
     it "não tem protocolo para despachos onde não é obrigatório" do
-      expect { RpiMarca::Publicacao.new(PUBLICACAO_SEM_PROTOCOLO) }.not_to raise_error
+      expect { RpiMarca::Publicacao.new(PUBLICACAO_SEM_PROTOCOLO) }
+        .not_to raise_error
     end
 
     it "protocolo tem dados corretos" do
@@ -395,15 +442,27 @@ describe RpiMarca::Publicacao do
     end
 
     it "pode ter texto complementar" do
-      xml = '<processo numero="905653858"><despachos><despacho codigo="IPAS423" nome="Notificação de oposição para manifestação"><texto-complementar>850130127025 de 02/07/2013, 850130131596 de 08/07/2013 e 850130122879 de 28/06/2013</texto-complementar></despacho></despachos></processo>'
+      # rubocop:disable Metrics/LineLength
+      xml = <<-PUBLICACAO
+        <processo numero="905653858">
+          <despachos>
+            <despacho codigo="IPAS423" nome="Notificação de oposição para manifestação">
+              <texto-complementar>850130127025 de 02/07/2013, 850130131596 de 08/07/2013 e 850130122879 de 28/06/2013</texto-complementar>
+            </despacho>
+          </despachos>
+        </processo>
+      PUBLICACAO
+      # rubocop:enable Metrics/LineLength
+
       publicacao = RpiMarca::Publicacao.new(xml)
       despacho = publicacao.despachos.first
 
-      expect(despacho.complemento).to eq "850130127025 de 02/07/2013, 850130131596 de 08/07/2013 e 850130122879 de 28/06/2013"
+      expect(despacho.complemento).to eq "850130127025 de 02/07/2013, " \
+        "850130131596 de 08/07/2013 e 850130122879 de 28/06/2013"
     end
 
     it "texto complementar pode conter outros protocolos" do
-      publicacao = RpiMarca::Publicacao.new(TEXTO_COMPLEMENTAR_CONTENDO_PROTOCOLO)
+      publicacao = RpiMarca::Publicacao.new(TEXTO_COMPLEMENTAR_COM_PROTOCOLO)
       despacho = publicacao.despachos.last
 
       expect(despacho.protocolos_complemento.length).to eq 3
@@ -422,7 +481,8 @@ describe RpiMarca::Publicacao do
       despacho = publicacao.despachos.first
       protocolo = despacho.protocolo
 
-      expect(protocolo.procurador).to eq "PICOSSE E CALABRESE ADVOGADOS ASSOCIADOS"
+      expect(protocolo.procurador)
+        .to eq "PICOSSE E CALABRESE ADVOGADOS ASSOCIADOS"
     end
 
     it "pode ter requerente" do
@@ -431,7 +491,8 @@ describe RpiMarca::Publicacao do
       protocolo = despacho.protocolo
       requerente = protocolo.requerente
 
-      expect(requerente.nome_razao_social).to eq "G.A.R. GESTÃO E ADMINISTRAÇÃO E RODOVIAS LTDA"
+      expect(requerente.nome_razao_social)
+        .to eq "G.A.R. GESTÃO E ADMINISTRAÇÃO E RODOVIAS LTDA"
       expect(requerente.pais).to eq "BR"
       expect(requerente.uf).to eq "SP"
     end
@@ -444,12 +505,14 @@ describe RpiMarca::Publicacao do
       cessionario = protocolo.cessionario
 
       expect(cedente).not_to be_nil
-      expect(cedente.nome_razao_social).to eq "K.V.M. COMÉRCIO E CONFECÇÕES LTDA-EPP"
+      expect(cedente.nome_razao_social)
+        .to eq "K.V.M. COMÉRCIO E CONFECÇÕES LTDA-EPP"
       expect(cedente.pais).to eq "BR"
       expect(cedente.uf).to eq "SP"
 
       expect(cessionario).not_to be_nil
-      expect(cessionario.nome_razao_social).to eq "K.V.M. COMÉRCIO E CONFECÇÕES LTDA-EPP"
+      expect(cessionario.nome_razao_social)
+        .to eq "K.V.M. COMÉRCIO E CONFECÇÕES LTDA-EPP"
       expect(cessionario.pais).to be_nil
       expect(cessionario.uf).to be_nil
     end
@@ -462,7 +525,10 @@ describe RpiMarca::Publicacao do
       expect(publicacao.ncl).not_to be_nil
       expect(publicacao.ncl.classe).to eq "35"
       expect(publicacao.ncl.edicao).to eq 10
-      expect(publicacao.ncl.especificacao).to eq "COMÉRCIO VAREJISTA ATRAVÉS DE QUALQUER MEIO DE BONECOS, ESTÁTUAS, DIORAMAS, BRINQUEDOS COLECIONÁVEIS, RELACIONADOS A PERSONAGENS DE FILMES E SÉRIES DE TV E VIDEOGAMES.;"
+      expect(publicacao.ncl.especificacao)
+        .to eq "COMÉRCIO VAREJISTA ATRAVÉS DE QUALQUER MEIO DE BONECOS, " \
+          "ESTÁTUAS, DIORAMAS, BRINQUEDOS COLECIONÁVEIS, RELACIONADOS A " \
+          "PERSONAGENS DE FILMES E SÉRIES DE TV E VIDEOGAMES.;"
     end
 
     it "classificação NCL pode vir sem edição" do
@@ -471,7 +537,10 @@ describe RpiMarca::Publicacao do
       expect(publicacao.ncl).not_to be_nil
       expect(publicacao.ncl.classe).to eq "35"
       expect(publicacao.ncl.edicao).to be_nil
-      expect(publicacao.ncl.especificacao).to eq "COMÉRCIO VAREJISTA ATRAVÉS DE QUALQUER MEIO DE BONECOS, ESTÁTUAS, DIORAMAS, BRINQUEDOS COLECIONÁVEIS, RELACIONADOS A PERSONAGENS DE FILMES E SÉRIES DE TV E VIDEOGAMES.;"
+      expect(publicacao.ncl.especificacao)
+        .to eq "COMÉRCIO VAREJISTA ATRAVÉS DE QUALQUER MEIO DE BONECOS, " \
+          "ESTÁTUAS, DIORAMAS, BRINQUEDOS COLECIONÁVEIS, RELACIONADOS A " \
+          "PERSONAGENS DE FILMES E SÉRIES DE TV E VIDEOGAMES.;"
     end
 
     it "pode ter classificação nacional" do
@@ -486,7 +555,8 @@ describe RpiMarca::Publicacao do
     end
 
     it "classificação nacional não pode ter mais de 3 subclasses" do
-      expect { RpiMarca::Publicacao.new(CLASSE_NACIONAL_MAIS_DE_3_SUBCLASSES) }.to raise_error(RpiMarca::ParseError)
+      expect { RpiMarca::Publicacao.new(CLASSE_NACIONAL_MAIS_DE_3_SUBCLASSES) }
+        .to raise_error(RpiMarca::ParseError)
     end
 
     it "pode ter classificação de logotipo" do
@@ -502,7 +572,8 @@ describe RpiMarca::Publicacao do
     end
 
     it "classificação de logotipo não pode ter mais de 5 classes" do
-      expect { RpiMarca::Publicacao.new(CLASSE_LOGOTIPO_MAIS_DE_5_SUBCLASSES) }.to raise_error(RpiMarca::ParseError)
+      expect { RpiMarca::Publicacao.new(CLASSE_LOGOTIPO_MAIS_DE_5_SUBCLASSES) }
+        .to raise_error(RpiMarca::ParseError)
     end
   end
 
@@ -516,7 +587,8 @@ describe RpiMarca::Publicacao do
       publicacao = RpiMarca::Publicacao.new(PROCURADOR_SEM_PROTOCOLO)
 
       titular = publicacao.titulares.first
-      expect(titular.nome_razao_social).to eq "DIGITAL 21 PRODUÇÕES ARTISTICAS LTDA"
+      expect(titular.nome_razao_social)
+        .to eq "DIGITAL 21 PRODUÇÕES ARTISTICAS LTDA"
       expect(titular.pais).to eq "BR"
       expect(titular.uf).to eq "SP"
     end
@@ -525,7 +597,8 @@ describe RpiMarca::Publicacao do
       publicacao = RpiMarca::Publicacao.new(PROCURADOR_SEM_PROTOCOLO)
 
       titular = publicacao.titulares.last
-      expect(titular.nome_razao_social).to eq "BROOKFIELD RIO DE JANEIRO EMPREENDIMENTOS IMOBILIÁRIOS S/A."
+      expect(titular.nome_razao_social)
+        .to eq "BROOKFIELD RIO DE JANEIRO EMPREENDIMENTOS IMOBILIÁRIOS S/A."
       expect(titular.pais).to eq "BR"
       expect(titular.uf).to eq "RJ"
     end
@@ -568,7 +641,8 @@ describe RpiMarca::Publicacao do
     it "pode ter apostila" do
       publicacao = RpiMarca::Publicacao.new(DEPOSITO)
 
-      expect(publicacao.apostila).to eq 'SEM DIREITO AO USO EXCLUSIVO DA EXPRESSÃO "TOYS".'
+      expect(publicacao.apostila)
+        .to eq 'SEM DIREITO AO USO EXCLUSIVO DA EXPRESSÃO "TOYS".'
     end
 
     it "pode ter prioridade unionista" do
@@ -582,7 +656,8 @@ describe RpiMarca::Publicacao do
     end
 
     it "prioridade unionista deve ter data da prioridade" do
-      expect { RpiMarca::Publicacao.new(PRIORIDADE_UNIONISTA_SEM_DATA) }.to raise_error(RpiMarca::ParseError)
+      expect { RpiMarca::Publicacao.new(PRIORIDADE_UNIONISTA_SEM_DATA) }
+        .to raise_error(RpiMarca::ParseError)
     end
 
     it "pode ter processos sobrestadores" do

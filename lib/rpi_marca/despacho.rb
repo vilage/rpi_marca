@@ -1,8 +1,16 @@
 module RpiMarca
   class Despacho
-    attr_reader :codigo, :descricao, :protocolo, :complemento, :protocolos_complemento
+    attr_reader :codigo, :descricao, :protocolo, :complemento,
+                :protocolos_complemento
 
-    PROTOCOLOS_TEXTO_COMPLEMENTAR = Regexp.new(%r{(?<protocolo>[0-9]{12,}) de (?<dataprotocolo>[0-9]{2}/[0-9]{2}/[0-9]{4})})
+    # 850130127025 de 02/07/2013, 850130131596 de 08/07/2013
+    PROTOCOLOS_TEXTO_COMPL = %r{
+      (?<protocolo>[0-9]{12,})            # 850130127025
+      \s                                  # espaço
+      de
+      \s
+      (?<data>[0-9]{2}/[0-9]{2}/[0-9]{4}) # 02/07/2013
+    }x
 
     def initialize(codigo:, descricao:, complemento:, protocolo:)
       @codigo = codigo or fail ParseError
@@ -20,20 +28,23 @@ module RpiMarca
       new(
         codigo: codigo,
         descricao: Helpers.get_attribute_value(el, "nome"),
-        complemento: Helpers.get_element_value(el.at_xpath("texto-complementar")),
-        protocolo: Protocolo.parse(el.at_xpath("protocolo"), codigo)
+        protocolo: Protocolo.parse(el.at_xpath("protocolo"), codigo),
+        complemento: Helpers.get_element_value(
+          el.at_xpath("texto-complementar")
+        )
       )
     end
 
     private
 
     def parse_texto_complementar
-      @protocolos_complemento = @complemento.scan(PROTOCOLOS_TEXTO_COMPLEMENTAR).map do |protocolo, data|
-        Protocolo.new(
-          numero: protocolo,
-          data: Helpers.parse_date(data)
-        )
-      end
+      @protocolos_complemento =
+        @complemento.scan(PROTOCOLOS_TEXTO_COMPL).map do |protocolo, data|
+          Protocolo.new(
+            numero: protocolo,
+            data: Helpers.parse_date(data)
+          )
+        end
     end
   end
 end

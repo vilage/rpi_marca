@@ -1,6 +1,7 @@
 require "rpi_marca/revista"
 
 describe RpiMarca::Revista do
+  # rubocop:disable Metrics/LineLength
   RPI_2240 = <<-REVISTA
     <?xml version="1.0" encoding="UTF-8" ?>
     <revista numero="2240" data="10/12/2013">
@@ -77,6 +78,7 @@ describe RpiMarca::Revista do
       <foo/>
     </revista>
   REVISTA
+  # rubocop:enable Metrics/LineLength
 
   it "tem numero e data de publicação" do
     revista = RpiMarca::Revista.new(RPI_2240)

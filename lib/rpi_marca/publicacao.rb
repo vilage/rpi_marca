@@ -74,10 +74,13 @@ module RpiMarca
 
     def parse_processo(el)
       @processo = Helpers.get_attribute_value(el, "numero") or fail ParseError
-      @deposito = Helpers.parse_date(Helpers.get_attribute_value(el, "data-deposito"))
+      @deposito =
+        Helpers.parse_date(Helpers.get_attribute_value(el, "data-deposito"))
 
-      @concessao = Helpers.parse_date(Helpers.get_attribute_value(el, "data-concessao"))
-      @vigencia = Helpers.parse_date(Helpers.get_attribute_value(el, "data-vigencia"))
+      @concessao =
+        Helpers.parse_date(Helpers.get_attribute_value(el, "data-concessao"))
+      @vigencia =
+        Helpers.parse_date(Helpers.get_attribute_value(el, "data-vigencia"))
 
       fail ParseError if @concessao && @vigencia.nil?
       fail ParseError if @vigencia && @concessao.nil?
@@ -99,13 +102,14 @@ module RpiMarca
     end
 
     def parse_sobrestadores(el)
-      @sobrestadores = el.elements.map { |sobrestador| Sobrestador.parse(sobrestador) }
+      @sobrestadores = el.elements.map { |sobrest| Sobrestador.parse(sobrest) }
     end
 
     def parse_marca(el)
       @marca = Helpers.get_element_value(el.at_xpath(".//nome"))
       @apresentacao = Helpers.get_attribute_value(el, "apresentacao")
-      @natureza = NATUREZA_NORMALIZACAO.fetch(Helpers.get_attribute_value(el, "natureza")) { |default| default }
+      natureza = Helpers.get_attribute_value(el, "natureza")
+      @natureza = NATUREZA_NORMALIZACAO.fetch(natureza, natureza)
     end
 
     def parse_classe_nice(el)
@@ -121,7 +125,7 @@ module RpiMarca
     end
 
     def parse_prioridade_unionista(el)
-      @prioridades = el.elements.map { |prioridade| PrioridadeUnionista.parse(prioridade) }
+      @prioridades = el.elements.map { |prio| PrioridadeUnionista.parse(prio) }
     end
 
     def parse_apostila(el)
