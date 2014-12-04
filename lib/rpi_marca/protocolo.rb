@@ -23,10 +23,10 @@ module RpiMarca
     def self.parse(el, codigo_despacho)
       return if el.nil? && DESPACHOS_SEM_PROTOCOLO.include?(codigo_despacho)
 
-      numero = Helpers.get_attribute_value(el, "numero") or
-        fail ParseError, "Número do Protocolo é obrigatório"
-      data = Helpers.get_attribute_value(el, "data") or
-        fail ParseError, "Data do Protocolo é obrigatória"
+      numero = Helpers.get_attribute_value(el, 'numero') or
+        fail ParseError, 'Número do Protocolo é obrigatório'
+      data = Helpers.get_attribute_value(el, 'data') or
+        fail ParseError, 'Data do Protocolo é obrigatória'
 
       new(
         numero: numero,
@@ -37,11 +37,11 @@ module RpiMarca
 
     def self.optional_params(el)
       {
-        codigo_servico: Helpers.get_attribute_value(el, "codigoServico"),
-        procurador: Helpers.get_element_value(el.at_xpath("procurador")),
-        requerente: Titular.parse(el.at_xpath("requerente")),
-        cedente: Titular.parse(el.at_xpath("cedente")),
-        cessionario: Titular.parse(el.at_xpath("cessionario"))
+        codigo_servico: Helpers.get_attribute_value(el, 'codigoServico'),
+        procurador: Helpers.get_element_value(el.at_xpath('procurador')),
+        requerente: Titular.parse(el.at_xpath('requerente')),
+        cedente: Titular.parse(el.at_xpath('cedente')),
+        cessionario: Titular.parse(el.at_xpath('cessionario'))
       }
     end
 
@@ -52,7 +52,7 @@ module RpiMarca
     def format_codigo_servico(codigo)
       return unless codigo
 
-      "#{codigo[0...3]}.#{codigo[3..-1]}".chomp(".")
+      "#{codigo[0...3]}.#{codigo[3..-1]}".chomp('.')
     end
   end
 end

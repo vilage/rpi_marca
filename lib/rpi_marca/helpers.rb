@@ -8,11 +8,11 @@ module RpiMarca
     end
 
     def self.get_element_value(element)
-      return element.text unless element.nil? || element.text == ""
+      return element.text unless element.nil? || element.text == ''
     end
 
     def self.parse_date(value)
-      Date.strptime(value, "%d/%m/%Y") if value
+      Date.strptime(value, '%d/%m/%Y') if value
     end
   end
 end

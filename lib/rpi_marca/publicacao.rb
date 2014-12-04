@@ -1,13 +1,13 @@
-require "rpi_marca/helpers"
-require "rpi_marca/titular"
-require "rpi_marca/protocolo"
-require "rpi_marca/despacho"
-require "rpi_marca/ncl"
-require "rpi_marca/classe_nacional"
-require "rpi_marca/classe_vienna"
-require "rpi_marca/prioridade_unionista"
-require "rpi_marca/sobrestador"
-require "nokogiri"
+require 'rpi_marca/helpers'
+require 'rpi_marca/titular'
+require 'rpi_marca/protocolo'
+require 'rpi_marca/despacho'
+require 'rpi_marca/ncl'
+require 'rpi_marca/classe_nacional'
+require 'rpi_marca/classe_vienna'
+require 'rpi_marca/prioridade_unionista'
+require 'rpi_marca/sobrestador'
+require 'nokogiri'
 
 module RpiMarca
   class Publicacao
@@ -29,7 +29,7 @@ module RpiMarca
     attr_reader :prioridades
 
     NATUREZA_NORMALIZACAO = {
-      "Certific." => "Certificação"
+      'Certific.' => 'Certificação'
     }
 
     def initialize(publicacao)
@@ -49,12 +49,12 @@ module RpiMarca
         if element.is_a? Nokogiri::XML::Element
           element
         elsif element.is_a? String
-          Nokogiri::XML(element).at_xpath("//processo")
+          Nokogiri::XML(element).at_xpath('//processo')
         else
           fail ParseError, "Publicação em formato inválido: #{element.class}"
         end
 
-      fail ParseError if element.name != "processo"
+      fail ParseError if element.name != 'processo'
 
       element
     end
@@ -63,7 +63,7 @@ module RpiMarca
       parse_processo(publicacao)
 
       publicacao.elements.each do |el|
-        normalized_element_name = el.name.gsub("-", "_")
+        normalized_element_name = el.name.gsub('-', '_')
         parse_method = "parse_#{normalized_element_name}".to_sym
 
         fail ParseError unless respond_to?(parse_method, true)
@@ -73,14 +73,14 @@ module RpiMarca
     end
 
     def parse_processo(el)
-      @processo = Helpers.get_attribute_value(el, "numero") or fail ParseError
+      @processo = Helpers.get_attribute_value(el, 'numero') or fail ParseError
       @deposito =
-        Helpers.parse_date(Helpers.get_attribute_value(el, "data-deposito"))
+        Helpers.parse_date(Helpers.get_attribute_value(el, 'data-deposito'))
 
       @concessao =
-        Helpers.parse_date(Helpers.get_attribute_value(el, "data-concessao"))
+        Helpers.parse_date(Helpers.get_attribute_value(el, 'data-concessao'))
       @vigencia =
-        Helpers.parse_date(Helpers.get_attribute_value(el, "data-vigencia"))
+        Helpers.parse_date(Helpers.get_attribute_value(el, 'data-vigencia'))
 
       fail ParseError if @concessao && @vigencia.nil?
       fail ParseError if @vigencia && @concessao.nil?
@@ -106,9 +106,9 @@ module RpiMarca
     end
 
     def parse_marca(el)
-      @marca = Helpers.get_element_value(el.at_xpath(".//nome"))
-      @apresentacao = Helpers.get_attribute_value(el, "apresentacao")
-      natureza = Helpers.get_attribute_value(el, "natureza")
+      @marca = Helpers.get_element_value(el.at_xpath('.//nome'))
+      @apresentacao = Helpers.get_attribute_value(el, 'apresentacao')
+      natureza = Helpers.get_attribute_value(el, 'natureza')
       @natureza = NATUREZA_NORMALIZACAO.fetch(natureza, natureza)
     end
 

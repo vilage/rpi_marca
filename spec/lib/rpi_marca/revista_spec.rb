@@ -1,4 +1,4 @@
-require "rpi_marca/revista"
+require 'rpi_marca/revista'
 
 describe RpiMarca::Revista do
   # rubocop:disable Metrics/LineLength
@@ -80,40 +80,40 @@ describe RpiMarca::Revista do
   REVISTA
   # rubocop:enable Metrics/LineLength
 
-  it "tem numero e data de publicação" do
+  it 'tem numero e data de publicação' do
     revista = RpiMarca::Revista.new(RPI_2240)
 
     expect(revista.numero).to eq 2240
     expect(revista.data_publicacao).to eq Date.new(2013, 12, 10)
   end
 
-  it "possui várias publicações" do
+  it 'possui várias publicações' do
     revista = RpiMarca::Revista.new(RPI_2240)
 
     expect(revista.count).to eq 3
   end
 
-  it "retorna objeto contendo dados da publicação" do
+  it 'retorna objeto contendo dados da publicação' do
     revista = RpiMarca::Revista.new(RPI_2240)
     publicacao = revista.first
 
     expect(publicacao).to be_a RpiMarca::Publicacao
   end
 
-  it "retorna um Enumerator" do
+  it 'retorna um Enumerator' do
     revista = RpiMarca::Revista.new(RPI_2240)
 
     expect(revista.each).to be_a Enumerator
   end
 
-  describe "#valid?" do
-    it "XML é válido" do
+  describe '#valid?' do
+    it 'XML é válido' do
       revista = RpiMarca::Revista.new(RPI_2240)
 
       expect(revista).to be_valid
     end
 
-    it "erro quando XML é inválido" do
+    it 'erro quando XML é inválido' do
       revista = RpiMarca::Revista.new(RPI_INVALIDA)
 
       expect(revista).not_to be_valid

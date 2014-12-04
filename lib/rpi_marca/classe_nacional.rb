@@ -20,17 +20,17 @@ module RpiMarca
       subclasses = parse_subclasses(el)
 
       new(
-        classe: Helpers.get_attribute_value(el, "codigo").to_i,
+        classe: Helpers.get_attribute_value(el, 'codigo').to_i,
         **subclasses,
         especificacao: Helpers.get_element_value(
-          el.at_xpath(".//especificacao")
+          el.at_xpath('.//especificacao')
         )
       )
     end
 
     def self.parse_subclasses(el)
-      subclasses = el.xpath(".//sub-classe-nacional").map { |s| s["codigo"] }
-      fail ParseError, "Classe nacional possui mais de 3 subclasses" if
+      subclasses = el.xpath('.//sub-classe-nacional').map { |s| s['codigo'] }
+      fail ParseError, 'Classe nacional possui mais de 3 subclasses' if
         subclasses.length > 3
 
       {

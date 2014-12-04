@@ -47,12 +47,6 @@ Style/RegexpLiteral:
     - 'Guardfile'
     - '**/*.gemspec'
 
-# Offense count: 212
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/StringLiterals:
-  Enabled: false
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Style/UnneededPercentQ:

@@ -18,14 +18,14 @@ module RpiMarca
       subclasses = parse_subclasses(el)
 
       new(
-        edicao: Helpers.get_attribute_value(el, "edicao").to_i,
+        edicao: Helpers.get_attribute_value(el, 'edicao').to_i,
         **subclasses
       )
     end
 
     def self.parse_subclasses(el)
-      subclasses = el.xpath(".//classe-vienna").map { |s| s["codigo"] }
-      fail ParseError, "Classe Vienna possui mais de 5 subclasses" if
+      subclasses = el.xpath('.//classe-vienna').map { |s| s['codigo'] }
+      fail ParseError, 'Classe Vienna possui mais de 5 subclasses' if
         subclasses.length > 5
 
       {

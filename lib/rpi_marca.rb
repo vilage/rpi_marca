@@ -1,4 +1,4 @@
-require "rpi_marca/version"
+require 'rpi_marca/version'
 
 module RpiMarca
   # Your code goes here...

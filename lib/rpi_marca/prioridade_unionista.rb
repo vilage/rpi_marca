@@ -4,7 +4,7 @@ module RpiMarca
 
     def initialize(numero:, data:, pais:)
       fail ParseError,
-           "Publicação unionista deve ter data da prioridade" unless data
+           'Publicação unionista deve ter data da prioridade' unless data
 
       @numero = numero
       @data = data
@@ -15,9 +15,9 @@ module RpiMarca
       return unless el
 
       new(
-        numero: Helpers.get_attribute_value(el, "numero"),
-        data: Helpers.parse_date(Helpers.get_attribute_value(el, "data")),
-        pais: Helpers.get_attribute_value(el, "pais")
+        numero: Helpers.get_attribute_value(el, 'numero'),
+        data: Helpers.parse_date(Helpers.get_attribute_value(el, 'data')),
+        pais: Helpers.get_attribute_value(el, 'pais')
       )
     end
   end
