@@ -5,4 +5,4 @@ inherit_from: .rubocop_todo.yml
 Metrics/ParameterLists:
   Exclude:
     - '**/vienna_class.rb'
-    - '**/protocolo.rb'
+    - '**/receipt.rb'

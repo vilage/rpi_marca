@@ -1,6 +1,6 @@
 require 'rpi_marca/helpers'
 require 'rpi_marca/titular'
-require 'rpi_marca/protocolo'
+require 'rpi_marca/receipt'
 require 'rpi_marca/despacho'
 require 'rpi_marca/ncl'
 require 'rpi_marca/national_class'

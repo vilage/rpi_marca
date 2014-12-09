@@ -386,8 +386,8 @@ describe RpiMarca::Publicacao do
       despacho = publicacao.despachos.first
 
       expect(despacho.codigo).to eq 'IPAS270'
-      expect(despacho.protocolo.numero).to eq '810110405339'
-      expect(despacho.protocolo.data).to eq Date.new(2013, 7, 1)
+      expect(despacho.receipt.number).to eq '810110405339'
+      expect(despacho.receipt.date).to eq Date.new(2013, 7, 1)
       expect(despacho.complemento)
         .to eq 'Protocolo: 810110405339 (17/03/2011) Petição (tipo): Anotação' \
           ' de transferência de titularidade decorrente de cisão (349.2) ' \
@@ -401,8 +401,8 @@ describe RpiMarca::Publicacao do
       despacho = publicacao.despachos[1] # segundo
 
       expect(despacho.codigo).to eq 'IPAS009'
-      expect(despacho.protocolo.numero).to eq '1010101010101010'
-      expect(despacho.protocolo.data).to eq Date.new(2012, 12, 1)
+      expect(despacho.receipt.number).to eq '1010101010101010'
+      expect(despacho.receipt.date).to eq Date.new(2012, 12, 1)
       expect(despacho.complemento).to be_nil
     end
   end
@@ -433,11 +433,11 @@ describe RpiMarca::Publicacao do
     it 'protocolo tem dados corretos' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
       despacho = publicacao.despachos.first
-      protocolo = despacho.protocolo
+      receipt = despacho.receipt
 
-      expect(protocolo.numero).to eq '810110405339'
-      expect(protocolo.data).to eq Date.new(2009, 11, 12)
-      expect(protocolo.codigo_servico).to eq '337.1'
+      expect(receipt.number).to eq '810110405339'
+      expect(receipt.date).to eq Date.new(2009, 11, 12)
+      expect(receipt.service_code).to eq '337.1'
 
     end
 
@@ -465,56 +465,56 @@ describe RpiMarca::Publicacao do
       publicacao = RpiMarca::Publicacao.new(TEXTO_COMPLEMENTAR_COM_PROTOCOLO)
       despacho = publicacao.despachos.last
 
-      expect(despacho.protocolos_complemento.length).to eq 3
+      expect(despacho.complementary_receipts.length).to eq 3
 
-      protocolo1 = despacho.protocolos_complemento.first
-      expect(protocolo1.numero).to eq '850130127025'
-      expect(protocolo1.data).to eq Date.new(2013, 7, 2)
+      receipt1 = despacho.complementary_receipts.first
+      expect(receipt1.number).to eq '850130127025'
+      expect(receipt1.date).to eq Date.new(2013, 7, 2)
 
-      protocolo3 = despacho.protocolos_complemento.last
-      expect(protocolo3.numero).to eq '850130122879'
-      expect(protocolo3.data).to eq Date.new(2013, 6, 28)
+      receipt3 = despacho.complementary_receipts.last
+      expect(receipt3.number).to eq '850130122879'
+      expect(receipt3.date).to eq Date.new(2013, 6, 28)
     end
 
     it 'pode ter procurador' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
       despacho = publicacao.despachos.first
-      protocolo = despacho.protocolo
+      receipt = despacho.receipt
 
-      expect(protocolo.procurador)
+      expect(receipt.agent)
         .to eq 'PICOSSE E CALABRESE ADVOGADOS ASSOCIADOS'
     end
 
     it 'pode ter requerente' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
       despacho = publicacao.despachos.first
-      protocolo = despacho.protocolo
-      requerente = protocolo.requerente
+      receipt = despacho.receipt
+      applicant = receipt.applicant
 
-      expect(requerente.nome_razao_social)
+      expect(applicant.nome_razao_social)
         .to eq 'G.A.R. GESTÃO E ADMINISTRAÇÃO E RODOVIAS LTDA'
-      expect(requerente.pais).to eq 'BR'
-      expect(requerente.uf).to eq 'SP'
+      expect(applicant.pais).to eq 'BR'
+      expect(applicant.uf).to eq 'SP'
     end
 
     it 'pode ter cedente e cessionário' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
       despacho = publicacao.despachos.first
-      protocolo = despacho.protocolo
-      cedente = protocolo.cedente
-      cessionario = protocolo.cessionario
+      receipt = despacho.receipt
+      assignor = receipt.assignor
+      assignee = receipt.assignee
 
-      expect(cedente).not_to be_nil
-      expect(cedente.nome_razao_social)
+      expect(assignor).not_to be_nil
+      expect(assignor.nome_razao_social)
         .to eq 'K.V.M. COMÉRCIO E CONFECÇÕES LTDA-EPP'
-      expect(cedente.pais).to eq 'BR'
-      expect(cedente.uf).to eq 'SP'
+      expect(assignor.pais).to eq 'BR'
+      expect(assignor.uf).to eq 'SP'
 
-      expect(cessionario).not_to be_nil
-      expect(cessionario.nome_razao_social)
+      expect(assignee).not_to be_nil
+      expect(assignee.nome_razao_social)
         .to eq 'K.V.M. COMÉRCIO E CONFECÇÕES LTDA-EPP'
-      expect(cessionario.pais).to be_nil
-      expect(cessionario.uf).to be_nil
+      expect(assignee.pais).to be_nil
+      expect(assignee.uf).to be_nil
     end
   end
 
