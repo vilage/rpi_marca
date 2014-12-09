@@ -523,9 +523,9 @@ describe RpiMarca::Publicacao do
       publicacao = RpiMarca::Publicacao.new(DEPOSITO)
 
       expect(publicacao.ncl).not_to be_nil
-      expect(publicacao.ncl.classe).to eq '35'
-      expect(publicacao.ncl.edicao).to eq 10
-      expect(publicacao.ncl.especificacao)
+      expect(publicacao.ncl.number).to eq '35'
+      expect(publicacao.ncl.edition).to eq 10
+      expect(publicacao.ncl.goods_services)
         .to eq 'COMÉRCIO VAREJISTA ATRAVÉS DE QUALQUER MEIO DE BONECOS, ' \
           'ESTÁTUAS, DIORAMAS, BRINQUEDOS COLECIONÁVEIS, RELACIONADOS A ' \
           'PERSONAGENS DE FILMES E SÉRIES DE TV E VIDEOGAMES.;'
@@ -535,9 +535,9 @@ describe RpiMarca::Publicacao do
       publicacao = RpiMarca::Publicacao.new(DEPOSITO_NCL_SEM_EDICAO)
 
       expect(publicacao.ncl).not_to be_nil
-      expect(publicacao.ncl.classe).to eq '35'
-      expect(publicacao.ncl.edicao).to be_nil
-      expect(publicacao.ncl.especificacao)
+      expect(publicacao.ncl.number).to eq '35'
+      expect(publicacao.ncl.edition).to be_nil
+      expect(publicacao.ncl.goods_services)
         .to eq 'COMÉRCIO VAREJISTA ATRAVÉS DE QUALQUER MEIO DE BONECOS, ' \
           'ESTÁTUAS, DIORAMAS, BRINQUEDOS COLECIONÁVEIS, RELACIONADOS A ' \
           'PERSONAGENS DE FILMES E SÉRIES DE TV E VIDEOGAMES.;'
