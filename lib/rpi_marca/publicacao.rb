@@ -3,7 +3,7 @@ require 'rpi_marca/titular'
 require 'rpi_marca/protocolo'
 require 'rpi_marca/despacho'
 require 'rpi_marca/ncl'
-require 'rpi_marca/classe_nacional'
+require 'rpi_marca/national_class'
 require 'rpi_marca/classe_vienna'
 require 'rpi_marca/prioridade_unionista'
 require 'rpi_marca/sobrestador'
@@ -17,7 +17,7 @@ module RpiMarca
     attr_reader :concessao
     attr_reader :vigencia
     attr_reader :ncl
-    attr_reader :classe_nacional
+    attr_reader :national_class
     attr_reader :classe_vienna
     attr_reader :titulares
     attr_reader :marca
@@ -117,7 +117,7 @@ module RpiMarca
     end
 
     def parse_classe_nacional(el)
-      @classe_nacional = ClasseNacional.parse(el)
+      @national_class = NationalClass.parse(el)
     end
 
     def parse_classes_vienna(el)

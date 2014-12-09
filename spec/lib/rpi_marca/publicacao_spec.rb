@@ -546,12 +546,12 @@ describe RpiMarca::Publicacao do
     it 'pode ter classificação nacional' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_COM_CLASSE_NACIONAL)
 
-      expect(publicacao.classe_nacional).not_to be_nil
-      expect(publicacao.classe_nacional.classe).to eq 25
-      expect(publicacao.classe_nacional.subclasse1).to eq 10
-      expect(publicacao.classe_nacional.subclasse2).to eq 20
-      expect(publicacao.classe_nacional.subclasse3).to eq nil
-      expect(publicacao.classe_nacional.especificacao).to eq 'Teste'
+      expect(publicacao.national_class).not_to be_nil
+      expect(publicacao.national_class.number).to eq 25
+      expect(publicacao.national_class.subclass1).to eq 10
+      expect(publicacao.national_class.subclass2).to eq 20
+      expect(publicacao.national_class.subclass3).to eq nil
+      expect(publicacao.national_class.goods_services).to eq 'Teste'
     end
 
     it 'classificação nacional não pode ter mais de 3 subclasses' do
