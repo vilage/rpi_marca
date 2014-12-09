@@ -562,13 +562,13 @@ describe RpiMarca::Publicacao do
     it 'pode ter classificação de logotipo' do
       publicacao = RpiMarca::Publicacao.new(DEPOSITO)
 
-      expect(publicacao.classe_vienna).not_to be_nil
-      expect(publicacao.classe_vienna.edicao).to eq 4
-      expect(publicacao.classe_vienna.classe1).to eq '27.5.1'
-      expect(publicacao.classe_vienna.classe2).to eq '27.7.1'
-      expect(publicacao.classe_vienna.classe3).to be_nil
-      expect(publicacao.classe_vienna.classe4).to be_nil
-      expect(publicacao.classe_vienna.classe5).to be_nil
+      expect(publicacao.vienna_class).not_to be_nil
+      expect(publicacao.vienna_class.edition).to eq 4
+      expect(publicacao.vienna_class.subclass1).to eq '27.5.1'
+      expect(publicacao.vienna_class.subclass2).to eq '27.7.1'
+      expect(publicacao.vienna_class.subclass3).to be_nil
+      expect(publicacao.vienna_class.subclass4).to be_nil
+      expect(publicacao.vienna_class.subclass5).to be_nil
     end
 
     it 'classificação de logotipo não pode ter mais de 5 classes' do

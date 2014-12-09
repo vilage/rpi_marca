@@ -4,7 +4,7 @@ require 'rpi_marca/protocolo'
 require 'rpi_marca/despacho'
 require 'rpi_marca/ncl'
 require 'rpi_marca/national_class'
-require 'rpi_marca/classe_vienna'
+require 'rpi_marca/vienna_class'
 require 'rpi_marca/prioridade_unionista'
 require 'rpi_marca/sobrestador'
 require 'nokogiri'
@@ -18,7 +18,7 @@ module RpiMarca
     attr_reader :vigencia
     attr_reader :ncl
     attr_reader :national_class
-    attr_reader :classe_vienna
+    attr_reader :vienna_class
     attr_reader :titulares
     attr_reader :marca
     attr_reader :apresentacao
@@ -121,7 +121,7 @@ module RpiMarca
     end
 
     def parse_classes_vienna(el)
-      @classe_vienna = ClasseVienna.parse(el)
+      @vienna_class = ViennaClass.parse(el)
     end
 
     def parse_prioridade_unionista(el)
