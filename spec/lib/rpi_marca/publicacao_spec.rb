@@ -647,12 +647,12 @@ describe RpiMarca::Publicacao do
 
     it 'pode ter prioridade unionista' do
       publicacao = RpiMarca::Publicacao.new(DEPOSITO)
-      prioridade = publicacao.prioridades.first
+      priority = publicacao.priorities.first
 
-      expect(prioridade).not_to be_nil
-      expect(prioridade.numero).to eq 'CTM 010645091'
-      expect(prioridade.data).to eq Date.new(2012, 2, 15)
-      expect(prioridade.pais).to eq 'IT'
+      expect(priority).not_to be_nil
+      expect(priority.number).to eq 'CTM 010645091'
+      expect(priority.date).to eq Date.new(2012, 2, 15)
+      expect(priority.country).to eq 'IT'
     end
 
     it 'prioridade unionista deve ter data da prioridade' do

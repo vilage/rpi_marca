@@ -5,7 +5,7 @@ require 'rpi_marca/despacho'
 require 'rpi_marca/ncl'
 require 'rpi_marca/national_class'
 require 'rpi_marca/vienna_class'
-require 'rpi_marca/prioridade_unionista'
+require 'rpi_marca/priority'
 require 'rpi_marca/sobrestador'
 require 'nokogiri'
 
@@ -26,7 +26,7 @@ module RpiMarca
     attr_reader :procurador
     attr_reader :apostila
     attr_reader :sobrestadores
-    attr_reader :prioridades
+    attr_reader :priorities
 
     NATUREZA_NORMALIZACAO = {
       'Certific.' => 'Certificação'
@@ -36,7 +36,7 @@ module RpiMarca
       @despachos = []
       @titulares = []
       @sobrestadores = []
-      @prioridades = []
+      @priorities = []
 
       element = validate_and_parse_publicacao(publicacao)
       parse_xml_elements(element)
@@ -125,7 +125,7 @@ module RpiMarca
     end
 
     def parse_prioridade_unionista(el)
-      @prioridades = el.elements.map { |prio| PrioridadeUnionista.parse(prio) }
+      @priorities = el.elements.map { |prio| Priority.parse(prio) }
     end
 
     def parse_apostila(el)
