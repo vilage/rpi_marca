@@ -1,7 +1,7 @@
 require 'rpi_marca/helpers'
 require 'rpi_marca/titular'
 require 'rpi_marca/receipt'
-require 'rpi_marca/despacho'
+require 'rpi_marca/rule'
 require 'rpi_marca/ncl'
 require 'rpi_marca/national_class'
 require 'rpi_marca/vienna_class'
@@ -12,7 +12,7 @@ require 'nokogiri'
 module RpiMarca
   class Publicacao
     attr_reader :processo
-    attr_reader :despachos
+    attr_reader :rules
     attr_reader :deposito
     attr_reader :concessao
     attr_reader :vigencia
@@ -33,7 +33,7 @@ module RpiMarca
     }
 
     def initialize(publicacao)
-      @despachos = []
+      @rules = []
       @titulares = []
       @sobrestadores = []
       @priorities = []
@@ -90,7 +90,7 @@ module RpiMarca
       el = el.elements
       fail ParseError if el.empty?
 
-      @despachos = el.map { |despacho| Despacho.parse(despacho) }
+      @rules = el.map { |rule| Rule.parse(rule) }
     end
 
     def parse_procurador(el)

@@ -344,13 +344,13 @@ describe RpiMarca::Publicacao do
     it 'publicação com um despacho identificado corretamente' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
 
-      expect(publicacao.despachos.length).to eq 1
+      expect(publicacao.rules.length).to eq 1
     end
 
     it 'publicação com 2 despachos identificados corretamente' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_DOIS_DESPACHOS)
 
-      expect(publicacao.despachos.length).to eq 2
+      expect(publicacao.rules.length).to eq 2
     end
   end
 
@@ -383,12 +383,12 @@ describe RpiMarca::Publicacao do
 
     it 'primeiro despacho tem dados corretos' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_DOIS_DESPACHOS)
-      despacho = publicacao.despachos.first
+      rule = publicacao.rules.first
 
-      expect(despacho.codigo).to eq 'IPAS270'
-      expect(despacho.receipt.number).to eq '810110405339'
-      expect(despacho.receipt.date).to eq Date.new(2013, 7, 1)
-      expect(despacho.complemento)
+      expect(rule.ipas).to eq 'IPAS270'
+      expect(rule.receipt.number).to eq '810110405339'
+      expect(rule.receipt.date).to eq Date.new(2013, 7, 1)
+      expect(rule.complement)
         .to eq 'Protocolo: 810110405339 (17/03/2011) Petição (tipo): Anotação' \
           ' de transferência de titularidade decorrente de cisão (349.2) ' \
           'Procurador: CUSTODIO DE ALMEIDA CIA Cedente: I-PARK SOLUÇÕES ' \
@@ -398,12 +398,12 @@ describe RpiMarca::Publicacao do
 
     it 'segundo despacho tem dados corretos' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_DOIS_DESPACHOS)
-      despacho = publicacao.despachos[1] # segundo
+      rule = publicacao.rules[1] # segundo
 
-      expect(despacho.codigo).to eq 'IPAS009'
-      expect(despacho.receipt.number).to eq '1010101010101010'
-      expect(despacho.receipt.date).to eq Date.new(2012, 12, 1)
-      expect(despacho.complemento).to be_nil
+      expect(rule.ipas).to eq 'IPAS009'
+      expect(rule.receipt.number).to eq '1010101010101010'
+      expect(rule.receipt.date).to eq Date.new(2012, 12, 1)
+      expect(rule.complement).to be_nil
     end
   end
 
@@ -432,8 +432,8 @@ describe RpiMarca::Publicacao do
 
     it 'protocolo tem dados corretos' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
-      despacho = publicacao.despachos.first
-      receipt = despacho.receipt
+      rule = publicacao.rules.first
+      receipt = rule.receipt
 
       expect(receipt.number).to eq '810110405339'
       expect(receipt.date).to eq Date.new(2009, 11, 12)
@@ -455,31 +455,31 @@ describe RpiMarca::Publicacao do
       # rubocop:enable Metrics/LineLength
 
       publicacao = RpiMarca::Publicacao.new(xml)
-      despacho = publicacao.despachos.first
+      rule = publicacao.rules.first
 
-      expect(despacho.complemento).to eq '850130127025 de 02/07/2013, ' \
+      expect(rule.complement).to eq '850130127025 de 02/07/2013, ' \
         '850130131596 de 08/07/2013 e 850130122879 de 28/06/2013'
     end
 
     it 'texto complementar pode conter outros protocolos' do
       publicacao = RpiMarca::Publicacao.new(TEXTO_COMPLEMENTAR_COM_PROTOCOLO)
-      despacho = publicacao.despachos.last
+      rule = publicacao.rules.last
 
-      expect(despacho.complementary_receipts.length).to eq 3
+      expect(rule.complementary_receipts.length).to eq 3
 
-      receipt1 = despacho.complementary_receipts.first
+      receipt1 = rule.complementary_receipts.first
       expect(receipt1.number).to eq '850130127025'
       expect(receipt1.date).to eq Date.new(2013, 7, 2)
 
-      receipt3 = despacho.complementary_receipts.last
+      receipt3 = rule.complementary_receipts.last
       expect(receipt3.number).to eq '850130122879'
       expect(receipt3.date).to eq Date.new(2013, 6, 28)
     end
 
     it 'pode ter procurador' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
-      despacho = publicacao.despachos.first
-      receipt = despacho.receipt
+      rule = publicacao.rules.first
+      receipt = rule.receipt
 
       expect(receipt.agent)
         .to eq 'PICOSSE E CALABRESE ADVOGADOS ASSOCIADOS'
@@ -487,8 +487,8 @@ describe RpiMarca::Publicacao do
 
     it 'pode ter requerente' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
-      despacho = publicacao.despachos.first
-      receipt = despacho.receipt
+      rule = publicacao.rules.first
+      receipt = rule.receipt
       applicant = receipt.applicant
 
       expect(applicant.nome_razao_social)
@@ -499,8 +499,8 @@ describe RpiMarca::Publicacao do
 
     it 'pode ter cedente e cessionário' do
       publicacao = RpiMarca::Publicacao.new(PUBLICACAO_PROTOCOLO_COMPLETO)
-      despacho = publicacao.despachos.first
-      receipt = despacho.receipt
+      rule = publicacao.rules.first
+      receipt = rule.receipt
       assignor = receipt.assignor
       assignee = receipt.assignee
 
