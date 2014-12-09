@@ -3,16 +3,16 @@ require 'rpi_marca/publicacao'
 require 'nokogiri'
 
 module RpiMarca
-  class Revista
+  class Magazine
     include Enumerable
 
-    attr_reader :numero, :data_publicacao
+    attr_reader :number, :date
 
     def initialize(src)
       @source = Nokogiri::XML(src).root
 
-      @numero = Helpers.get_attribute_value(@source, 'numero').to_i
-      @data_publicacao = Helpers.parse_date(
+      @number = Helpers.get_attribute_value(@source, 'numero').to_i
+      @date = Helpers.parse_date(
         Helpers.get_attribute_value(@source, 'data')
       )
     end
@@ -28,8 +28,9 @@ module RpiMarca
     def valid?
       schema = File.join(
         File.dirname(File.expand_path(__FILE__)),
-        'rpi_marca.xsd'
+        'magazine.xsd'
       )
+
       File.open(schema, 'r') do |f|
         Nokogiri::XML::Schema(f).valid?(@source.document)
       end

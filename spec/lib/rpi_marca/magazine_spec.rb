@@ -1,6 +1,6 @@
-require 'rpi_marca/revista'
+require 'rpi_marca/magazine'
 
-describe RpiMarca::Revista do
+describe RpiMarca::Magazine do
   # rubocop:disable Metrics/LineLength
   RPI_2240 = <<-REVISTA
     <?xml version="1.0" encoding="UTF-8" ?>
@@ -81,42 +81,42 @@ describe RpiMarca::Revista do
   # rubocop:enable Metrics/LineLength
 
   it 'tem numero e data de publicação' do
-    revista = RpiMarca::Revista.new(RPI_2240)
+    magazine = RpiMarca::Magazine.new(RPI_2240)
 
-    expect(revista.numero).to eq 2240
-    expect(revista.data_publicacao).to eq Date.new(2013, 12, 10)
+    expect(magazine.number).to eq 2240
+    expect(magazine.date).to eq Date.new(2013, 12, 10)
   end
 
   it 'possui várias publicações' do
-    revista = RpiMarca::Revista.new(RPI_2240)
+    magazine = RpiMarca::Magazine.new(RPI_2240)
 
-    expect(revista.count).to eq 3
+    expect(magazine.count).to eq 3
   end
 
   it 'retorna objeto contendo dados da publicação' do
-    revista = RpiMarca::Revista.new(RPI_2240)
-    publicacao = revista.first
+    magazine = RpiMarca::Magazine.new(RPI_2240)
+    publication = magazine.first
 
-    expect(publicacao).to be_a RpiMarca::Publicacao
+    expect(publication).to be_a RpiMarca::Publicacao
   end
 
   it 'retorna um Enumerator' do
-    revista = RpiMarca::Revista.new(RPI_2240)
+    magazine = RpiMarca::Magazine.new(RPI_2240)
 
-    expect(revista.each).to be_a Enumerator
+    expect(magazine.each).to be_a Enumerator
   end
 
   describe '#valid?' do
     it 'XML é válido' do
-      revista = RpiMarca::Revista.new(RPI_2240)
+      magazine = RpiMarca::Magazine.new(RPI_2240)
 
-      expect(revista).to be_valid
+      expect(magazine).to be_valid
     end
 
     it 'erro quando XML é inválido' do
-      revista = RpiMarca::Revista.new(RPI_INVALIDA)
+      magazine = RpiMarca::Magazine.new(RPI_INVALIDA)
 
-      expect(revista).not_to be_valid
+      expect(magazine).not_to be_valid
     end
   end
 end
