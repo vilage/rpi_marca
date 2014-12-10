@@ -39,9 +39,9 @@ module RpiMarca
       {
         service_code: Helpers.get_attribute_value(el, 'codigoServico'),
         agent: Helpers.get_element_value(el.at_xpath('procurador')),
-        applicant: Titular.parse(el.at_xpath('requerente')),
-        assignor: Titular.parse(el.at_xpath('cedente')),
-        assignee: Titular.parse(el.at_xpath('cessionario'))
+        applicant: Owner.parse(el.at_xpath('requerente')),
+        assignor: Owner.parse(el.at_xpath('cedente')),
+        assignee: Owner.parse(el.at_xpath('cessionario'))
       }
     end
 

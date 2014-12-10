@@ -1,5 +1,5 @@
 require 'rpi_marca/helpers'
-require 'rpi_marca/titular'
+require 'rpi_marca/owner'
 require 'rpi_marca/receipt'
 require 'rpi_marca/rule'
 require 'rpi_marca/ncl'
@@ -19,7 +19,7 @@ module RpiMarca
     attr_reader :ncl
     attr_reader :national_class
     attr_reader :vienna_class
-    attr_reader :titulares
+    attr_reader :owners
     attr_reader :marca
     attr_reader :apresentacao
     attr_reader :natureza
@@ -34,7 +34,7 @@ module RpiMarca
 
     def initialize(publicacao)
       @rules = []
-      @titulares = []
+      @owners = []
       @previous_applications = []
       @priorities = []
 
@@ -98,7 +98,7 @@ module RpiMarca
     end
 
     def parse_titulares(el)
-      @titulares = el.elements.map { |titular| Titular.parse(titular) }
+      @owners = el.elements.map { |owner| Owner.parse(owner) }
     end
 
     def parse_sobrestadores(el)

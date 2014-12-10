@@ -491,10 +491,10 @@ describe RpiMarca::Publicacao do
       receipt = rule.receipt
       applicant = receipt.applicant
 
-      expect(applicant.nome_razao_social)
+      expect(applicant.name)
         .to eq 'G.A.R. GESTÃO E ADMINISTRAÇÃO E RODOVIAS LTDA'
-      expect(applicant.pais).to eq 'BR'
-      expect(applicant.uf).to eq 'SP'
+      expect(applicant.country).to eq 'BR'
+      expect(applicant.state).to eq 'SP'
     end
 
     it 'pode ter cedente e cessionário' do
@@ -505,16 +505,16 @@ describe RpiMarca::Publicacao do
       assignee = receipt.assignee
 
       expect(assignor).not_to be_nil
-      expect(assignor.nome_razao_social)
+      expect(assignor.name)
         .to eq 'K.V.M. COMÉRCIO E CONFECÇÕES LTDA-EPP'
-      expect(assignor.pais).to eq 'BR'
-      expect(assignor.uf).to eq 'SP'
+      expect(assignor.country).to eq 'BR'
+      expect(assignor.state).to eq 'SP'
 
       expect(assignee).not_to be_nil
-      expect(assignee.nome_razao_social)
+      expect(assignee.name)
         .to eq 'K.V.M. COMÉRCIO E CONFECÇÕES LTDA-EPP'
-      expect(assignee.pais).to be_nil
-      expect(assignee.uf).to be_nil
+      expect(assignee.country).to be_nil
+      expect(assignee.state).to be_nil
     end
   end
 
@@ -580,27 +580,27 @@ describe RpiMarca::Publicacao do
   context 'publicação' do
     it 'pode ter titulares' do
       publicacao = RpiMarca::Publicacao.new(PROCURADOR_SEM_PROTOCOLO)
-      expect(publicacao.titulares).not_to be_empty
+      expect(publicacao.owners).not_to be_empty
     end
 
     it 'primeiro titular tem dados corretos' do
       publicacao = RpiMarca::Publicacao.new(PROCURADOR_SEM_PROTOCOLO)
 
-      titular = publicacao.titulares.first
-      expect(titular.nome_razao_social)
+      owner = publicacao.owners.first
+      expect(owner.name)
         .to eq 'DIGITAL 21 PRODUÇÕES ARTISTICAS LTDA'
-      expect(titular.pais).to eq 'BR'
-      expect(titular.uf).to eq 'SP'
+      expect(owner.country).to eq 'BR'
+      expect(owner.state).to eq 'SP'
     end
 
     it 'segundo titular tem dados corretos' do
       publicacao = RpiMarca::Publicacao.new(PROCURADOR_SEM_PROTOCOLO)
 
-      titular = publicacao.titulares.last
-      expect(titular.nome_razao_social)
+      owner = publicacao.owners.last
+      expect(owner.name)
         .to eq 'BROOKFIELD RIO DE JANEIRO EMPREENDIMENTOS IMOBILIÁRIOS S/A.'
-      expect(titular.pais).to eq 'BR'
-      expect(titular.uf).to eq 'RJ'
+      expect(owner.country).to eq 'BR'
+      expect(owner.state).to eq 'RJ'
     end
 
     it 'pode ter marca' do
