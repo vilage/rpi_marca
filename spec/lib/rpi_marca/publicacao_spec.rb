@@ -663,12 +663,12 @@ describe RpiMarca::Publicacao do
     it 'pode ter processos sobrestadores' do
       publicacao = RpiMarca::Publicacao.new(PROCURADOR_SEM_PROTOCOLO)
 
-      sobrestadores = publicacao.sobrestadores
-      expect(sobrestadores).not_to be_nil
+      previous_applications = publicacao.previous_applications
+      expect(previous_applications).not_to be_nil
 
-      sobrestador = sobrestadores.first
-      expect(sobrestador.processo).to eq '823129900'
-      expect(sobrestador.marca).to eq 'MÓDULO E-SECURITY'
+      previous_application = previous_applications.first
+      expect(previous_application.application).to eq '823129900'
+      expect(previous_application.trademark).to eq 'MÓDULO E-SECURITY'
     end
   end
 end

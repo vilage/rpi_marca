@@ -6,7 +6,7 @@ require 'rpi_marca/ncl'
 require 'rpi_marca/national_class'
 require 'rpi_marca/vienna_class'
 require 'rpi_marca/priority'
-require 'rpi_marca/sobrestador'
+require 'rpi_marca/previous_application'
 require 'nokogiri'
 
 module RpiMarca
@@ -25,7 +25,7 @@ module RpiMarca
     attr_reader :natureza
     attr_reader :procurador
     attr_reader :apostila
-    attr_reader :sobrestadores
+    attr_reader :previous_applications
     attr_reader :priorities
 
     NATUREZA_NORMALIZACAO = {
@@ -35,7 +35,7 @@ module RpiMarca
     def initialize(publicacao)
       @rules = []
       @titulares = []
-      @sobrestadores = []
+      @previous_applications = []
       @priorities = []
 
       element = validate_and_parse_publicacao(publicacao)
@@ -102,7 +102,8 @@ module RpiMarca
     end
 
     def parse_sobrestadores(el)
-      @sobrestadores = el.elements.map { |sobrest| Sobrestador.parse(sobrest) }
+      @previous_applications =
+        el.elements.map { |application| PreviousApplication.parse(application) }
     end
 
     def parse_marca(el)
