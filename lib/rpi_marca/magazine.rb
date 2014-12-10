@@ -1,5 +1,5 @@
 require 'rpi_marca/helpers'
-require 'rpi_marca/publicacao'
+require 'rpi_marca/publication'
 require 'nokogiri'
 
 module RpiMarca
@@ -19,7 +19,7 @@ module RpiMarca
 
     def each
       if block_given?
-        @source.xpath('//processo').each { |el| yield Publicacao.new(el) }
+        @source.xpath('//processo').each { |el| yield Publication.new(el) }
       else
         to_enum(:each)
       end

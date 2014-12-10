@@ -97,7 +97,7 @@ describe RpiMarca::Magazine do
     magazine = RpiMarca::Magazine.new(RPI_2240)
     publication = magazine.first
 
-    expect(publication).to be_a RpiMarca::Publicacao
+    expect(publication).to be_a RpiMarca::Publication
   end
 
   it 'retorna um Enumerator' do

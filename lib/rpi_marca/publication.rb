@@ -10,48 +10,48 @@ require 'rpi_marca/previous_application'
 require 'nokogiri'
 
 module RpiMarca
-  class Publicacao
-    attr_reader :processo
+  class Publication
+    attr_reader :application
     attr_reader :rules
-    attr_reader :deposito
-    attr_reader :concessao
-    attr_reader :vigencia
+    attr_reader :filed_on
+    attr_reader :granted_on
+    attr_reader :expires_on
     attr_reader :ncl
     attr_reader :national_class
     attr_reader :vienna_class
     attr_reader :owners
-    attr_reader :marca
-    attr_reader :apresentacao
-    attr_reader :natureza
-    attr_reader :procurador
-    attr_reader :apostila
+    attr_reader :trademark
+    attr_reader :kind
+    attr_reader :nature
+    attr_reader :agent
+    attr_reader :disclaimer
     attr_reader :previous_applications
     attr_reader :priorities
 
-    NATUREZA_NORMALIZACAO = {
+    NATURE_NORMALIZATION = {
       'Certific.' => 'Certificação'
     }
 
-    def initialize(publicacao)
+    def initialize(publication)
       @rules = []
       @owners = []
       @previous_applications = []
       @priorities = []
 
-      element = validate_and_parse_publicacao(publicacao)
-      parse_xml_elements(element)
+      element = validate_and_parse_publication(publication)
+      parse_element_children(element)
     end
 
     protected
 
-    def validate_and_parse_publicacao(element)
+    def validate_and_parse_publication(element)
       element =
         if element.is_a? Nokogiri::XML::Element
           element
         elsif element.is_a? String
           Nokogiri::XML(element).at_xpath('//processo')
         else
-          fail ParseError, "Publicação em formato inválido: #{element.class}"
+          fail ParseError, "Input couldn't be recognized as a publication"
         end
 
       fail ParseError if element.name != 'processo'
@@ -59,12 +59,12 @@ module RpiMarca
       element
     end
 
-    def parse_xml_elements(publicacao)
-      parse_processo(publicacao)
+    def parse_element_children(publication)
+      parse_element_processo(publication)
 
-      publicacao.elements.each do |el|
+      publication.elements.each do |el|
         normalized_element_name = el.name.gsub('-', '_')
-        parse_method = "parse_#{normalized_element_name}".to_sym
+        parse_method = "parse_element_#{normalized_element_name}".to_sym
 
         fail ParseError unless respond_to?(parse_method, true)
 
@@ -72,65 +72,65 @@ module RpiMarca
       end
     end
 
-    def parse_processo(el)
-      @processo = Helpers.get_attribute_value(el, 'numero') or fail ParseError
-      @deposito =
+    def parse_element_processo(el)
+      @application =
+        Helpers.get_attribute_value(el, 'numero') or fail ParseError
+      @filed_on =
         Helpers.parse_date(Helpers.get_attribute_value(el, 'data-deposito'))
-
-      @concessao =
+      @granted_on =
         Helpers.parse_date(Helpers.get_attribute_value(el, 'data-concessao'))
-      @vigencia =
+      @expires_on =
         Helpers.parse_date(Helpers.get_attribute_value(el, 'data-vigencia'))
 
-      fail ParseError if @concessao && @vigencia.nil?
-      fail ParseError if @vigencia && @concessao.nil?
+      fail ParseError if @granted_on && @expires_on.nil?
+      fail ParseError if @expires_on && @granted_on.nil?
     end
 
-    def parse_despachos(el)
+    def parse_element_despachos(el)
       el = el.elements
       fail ParseError if el.empty?
 
       @rules = el.map { |rule| Rule.parse(rule) }
     end
 
-    def parse_procurador(el)
-      @procurador = Helpers.get_element_value(el)
+    def parse_element_procurador(el)
+      @agent = Helpers.get_element_value(el)
     end
 
-    def parse_titulares(el)
+    def parse_element_titulares(el)
       @owners = el.elements.map { |owner| Owner.parse(owner) }
     end
 
-    def parse_sobrestadores(el)
+    def parse_element_sobrestadores(el)
       @previous_applications =
         el.elements.map { |application| PreviousApplication.parse(application) }
     end
 
-    def parse_marca(el)
-      @marca = Helpers.get_element_value(el.at_xpath('.//nome'))
-      @apresentacao = Helpers.get_attribute_value(el, 'apresentacao')
-      natureza = Helpers.get_attribute_value(el, 'natureza')
-      @natureza = NATUREZA_NORMALIZACAO.fetch(natureza, natureza)
+    def parse_element_marca(el)
+      @trademark = Helpers.get_element_value(el.at_xpath('.//nome'))
+      @kind = Helpers.get_attribute_value(el, 'apresentacao')
+      nature = Helpers.get_attribute_value(el, 'natureza')
+      @nature = NATURE_NORMALIZATION.fetch(nature, nature)
     end
 
-    def parse_classe_nice(el)
+    def parse_element_classe_nice(el)
       @ncl = Ncl.parse(el)
     end
 
-    def parse_classe_nacional(el)
+    def parse_element_classe_nacional(el)
       @national_class = NationalClass.parse(el)
     end
 
-    def parse_classes_vienna(el)
+    def parse_element_classes_vienna(el)
       @vienna_class = ViennaClass.parse(el)
     end
 
-    def parse_prioridade_unionista(el)
+    def parse_element_prioridade_unionista(el)
       @priorities = el.elements.map { |prio| Priority.parse(prio) }
     end
 
-    def parse_apostila(el)
-      @apostila = Helpers.get_element_value(el)
+    def parse_element_apostila(el)
+      @disclaimer = Helpers.get_element_value(el)
     end
   end
 end
