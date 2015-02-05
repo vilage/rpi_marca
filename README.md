@@ -1,5 +1,8 @@
 # RpiMarca
 
+[![Build Status](https://travis-ci.org/automatto/rpi_marca.svg?branch=master)](https://travis-ci.org/automatto/rpi_marca)
+[![Gem Version](https://badge.fury.io/rb/rpi_marca.svg)](http://badge.fury.io/rb/rpi_marca)
+
 Leitura da RPI de Marcas do INPI em formato XML.
 
 ## Installation
