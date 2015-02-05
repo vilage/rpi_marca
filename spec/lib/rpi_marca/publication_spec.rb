@@ -572,6 +572,11 @@ describe RpiMarca::Publication do
       expect(publication.vienna_class.subclass5).to be_nil
     end
 
+    it 'retorna a classificação de logotipo formatada' do
+      publication = RpiMarca::Publication.new(DEPOSITO)
+      expect(publication.vienna_class.to_s).to eq '27.5.1 / 27.7.1'
+    end
+
     it 'classificação de logotipo não pode ter mais de 5 classes' do
       expect { RpiMarca::Publication.new(CLASSE_LOGOTIPO_MAIS_DE_5_SUBCLASSES) }
         .to raise_error(RpiMarca::ParseError)

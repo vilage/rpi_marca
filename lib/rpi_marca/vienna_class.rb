@@ -13,6 +13,16 @@ module RpiMarca
       @subclass5 = subclass5
     end
 
+    def to_s
+      [
+        @subclass1,
+        @subclass2,
+        @subclass3,
+        @subclass4,
+        @subclass5
+        ].compact.join(' / ')
+    end
+
     def self.parse(el)
       return unless el
 
