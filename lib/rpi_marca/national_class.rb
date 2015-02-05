@@ -14,6 +14,16 @@ module RpiMarca
       @goods_services = goods_services
     end
 
+    def to_s
+      subclasses = [
+        @subclass1,
+        @subclass2,
+        @subclass3
+      ].compact.join('.')
+
+      "#{@number}/#{subclasses}"
+    end
+
     def self.parse(el)
       return unless el
 

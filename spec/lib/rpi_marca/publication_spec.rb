@@ -555,6 +555,11 @@ describe RpiMarca::Publication do
       expect(publication.national_class.goods_services).to eq 'Teste'
     end
 
+    it 'retorna a classificação nacional formatada' do
+      publication = RpiMarca::Publication.new(PUBLICACAO_COM_CLASSE_NACIONAL)
+      expect(publication.national_class.to_s).to eq '25/10.20'
+    end
+
     it 'classificação nacional não pode ter mais de 3 subclasses' do
       expect { RpiMarca::Publication.new(CLASSE_NACIONAL_MAIS_DE_3_SUBCLASSES) }
         .to raise_error(RpiMarca::ParseError)
