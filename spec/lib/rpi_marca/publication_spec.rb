@@ -409,13 +409,13 @@ describe RpiMarca::Publication do
   end
 
   context 'protocolo' do
-    it 'deve ter protocolo para despachos onde é obrigatório' do
+    it 'deve ter número de protocolo' do
       # rubocop:disable Metrics/LineLength
       xml = <<-XML
         <processo numero="905653858">
           <despachos>
             <despacho codigo="IPAS270" nome="Notificação de oposição para manifestação">
-              <texto-complementar>850130127025 de 02/07/2013, 850130131596 de 08/07/2013 e 850130122879 de 28/06/2013</texto-complementar>
+              <protocolo data="01/07/2013"/>
             </despacho>
           </despachos>
         </processo>
@@ -426,9 +426,21 @@ describe RpiMarca::Publication do
         .to raise_error(RpiMarca::ParseError)
     end
 
-    it 'não tem protocolo para despachos onde não é obrigatório' do
-      expect { RpiMarca::Publication.new(PUBLICACAO_SEM_PROTOCOLO) }
-        .not_to raise_error
+    it 'deve ter data de protocolo' do
+      # rubocop:disable Metrics/LineLength
+      xml = <<-XML
+        <processo numero="905653858">
+          <despachos>
+            <despacho codigo="IPAS270" nome="Notificação de oposição para manifestação">
+              <protocolo numero="99999999999"/>
+            </despacho>
+          </despachos>
+        </processo>
+      XML
+      # rubocop:enable Metrics/LineLength
+
+      expect { RpiMarca::Publication.new(xml) }
+        .to raise_error(RpiMarca::ParseError)
     end
 
     it 'protocolo tem dados corretos' do

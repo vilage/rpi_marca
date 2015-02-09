@@ -20,8 +20,8 @@ module RpiMarca
       @assignee = assignee
     end
 
-    def self.parse(el, rule_code)
-      return if el.nil? && IPAS_RECEIPT_NOT_REQUIRED.include?(rule_code)
+    def self.parse(el)
+      return if el.nil?
 
       number = Helpers.get_attribute_value(el, 'numero') or
         fail ParseError, 'Receipt number is required'

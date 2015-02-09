@@ -23,12 +23,10 @@ module RpiMarca
     end
 
     def self.parse(el)
-      ipas = Helpers.get_attribute_value(el, 'codigo')
-
       new(
-        ipas: ipas,
+        ipas: Helpers.get_attribute_value(el, 'codigo'),
         description: Helpers.get_attribute_value(el, 'nome'),
-        receipt: Receipt.parse(el.at_xpath('protocolo'), ipas),
+        receipt: Receipt.parse(el.at_xpath('protocolo')),
         complement: Helpers.get_element_value(
           el.at_xpath('texto-complementar')
         )
