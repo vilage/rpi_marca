@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rpi_marca (0.0.2)
+    rpi_marca (0.0.3)
       nokogiri (~> 1.6)
 
 GEM
